@@ -1,5 +1,7 @@
 # The Sky Tablet
 
+[**Open The Sky Tablet ↗**](https://sky-tablet.vercel.app/) · [**Discuss this project**](https://authority-engine-app.vercel.app/contact?source=sky-tablet) · [**Meet Andrew Lam**](https://authority-engine-app.vercel.app/about)
+
 Interactive public prototype exploring Mesopotamian astronomy and cuneiform writing.
 
 ## Current prototype

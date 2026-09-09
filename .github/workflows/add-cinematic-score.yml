@@ -1,0 +1,60 @@
+name: Add cinematic journey score
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/add-cinematic-score.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inject generative cinematic score
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          marker="function startTour(){state='tour';tourStart=performance.now();modeLabel.textContent='GUIDED JOURNEY';tabletCard.style.display='none'}"
+          if 'function startScore()' in s:
+              print('Score already installed')
+              raise SystemExit
+          audio=r'''// Original generative score: Web Audio synthesis, no external/copyrighted recording.
+let audioCtx=null,scoreMaster=null,scoreNodes=[];
+function stopScore(fade=1.4){if(!audioCtx||!scoreMaster)return;const t=audioCtx.currentTime;try{scoreMaster.gain.cancelScheduledValues(t);scoreMaster.gain.setValueAtTime(scoreMaster.gain.value,t);scoreMaster.gain.exponentialRampToValueAtTime(.0001,t+fade)}catch(e){}setTimeout(()=>{scoreNodes.forEach(n=>{try{n.stop?.()}catch(e){}try{n.disconnect?.()}catch(e){}});scoreNodes=[];scoreMaster=null},(fade+.15)*1000)}
+function startScore(){
+ stopScore(.08);const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();audioCtx.resume();const now=audioCtx.currentTime;
+ const master=audioCtx.createGain(),comp=audioCtx.createDynamicsCompressor(),verb=audioCtx.createConvolver();scoreMaster=master;master.gain.setValueAtTime(.0001,now);master.gain.exponentialRampToValueAtTime(.72,now+2.8);master.gain.setValueAtTime(.72,now+47);master.gain.exponentialRampToValueAtTime(.0001,now+55);master.connect(comp);comp.connect(audioCtx.destination);comp.threshold.value=-15;comp.knee.value=18;comp.ratio.value=3.5;comp.attack.value=.018;comp.release.value=.8;
+ const ir=audioCtx.createBuffer(2,audioCtx.sampleRate*5,audioCtx.sampleRate);for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2.5)}verb.buffer=ir;const wet=audioCtx.createGain();wet.gain.value=.32;verb.connect(wet);wet.connect(comp);
+ function tone(freq,start,dur,g=.1,type='sine',det=0,dest=master){const o=audioCtx.createOscillator(),v=audioCtx.createGain();o.type=type;o.frequency.value=freq;o.detune.value=det;v.gain.setValueAtTime(.0001,start);v.gain.exponentialRampToValueAtTime(g,start+Math.min(1.5,dur*.2));v.gain.setValueAtTime(g,start+Math.max(1.6,dur*.62));v.gain.exponentialRampToValueAtTime(.0001,start+dur);o.connect(v);v.connect(dest);v.connect(verb);o.start(start);o.stop(start+dur+.05);scoreNodes.push(o,v);}
+ // Subterranean temple drone: D / A with slow beating partials.
+ [36.71,55,73.42,110].forEach((f,i)=>{tone(f,now+.05,54,[.16,.10,.065,.035][i],i<2?'sine':'triangle',-5);tone(f,now+.05,54,[.11,.07,.04,.025][i],i<2?'sine':'triangle',5)});
+ // Evolving dark brass-like swells mapped to the camera chapters.
+ const chords=[[73.42,87.31,110],[65.41,82.41,110],[73.42,92.5,123.47],[55,73.42,110],[61.74,82.41,123.47],[73.42,98,146.83]];
+ [2,10,18,27,35,43].forEach((st,k)=>chords[k].forEach((f,j)=>tone(f,now+st,9,.045-j*.008,'sawtooth',(j-1)*4)));
+ // Slow ritual heartbeat / war-drum impacts, intensifying toward the sky reveal.
+ function drum(at,amp=.32){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(92,at);o.frequency.exponentialRampToValueAtTime(38,at+.42);g.gain.setValueAtTime(amp,at);g.gain.exponentialRampToValueAtTime(.0001,at+1.2);o.connect(g);g.connect(master);g.connect(verb);o.start(at);o.stop(at+1.25);scoreNodes.push(o,g)}
+ [4,8,12,16,20,23,26,29,31.5,34,36.2,38.4,40.4,42.4,44.2,46,47.7,49.4].forEach((x,i)=>drum(now+x,.18+Math.min(i,12)*.012));
+ // Celestial metallic voices bloom as Enlil / Anu / Ea appear.
+ function bell(freq,at,amp=.09){[1,2.01,3.97,6.1].forEach((r,i)=>tone(freq*r,at,5.5,amp/(i+1),'sine',0))}
+ [[293.66,31],[369.99,34],[440,37],[587.33,40],[739.99,43],[880,46]].forEach(([f,t],i)=>bell(f,now+t,.055+i*.006));
+ // Air / sand bed for scale and atmosphere.
+ const nb=audioCtx.createBuffer(1,audioCtx.sampleRate*56,audioCtx.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;const ns=audioCtx.createBufferSource(),nf=audioCtx.createBiquadFilter(),ng=audioCtx.createGain();ns.buffer=nb;nf.type='bandpass';nf.frequency.value=420;nf.Q.value=.32;ng.gain.setValueAtTime(.018,now);ng.gain.linearRampToValueAtTime(.055,now+38);ng.gain.linearRampToValueAtTime(.015,now+54);ns.connect(nf);nf.connect(ng);ng.connect(master);ng.connect(verb);ns.start(now);ns.stop(now+55);scoreNodes.push(ns,nf,ng,verb,wet,comp,master);
+}
+'''
+          if marker not in s: raise SystemExit('startTour marker not found')
+          replacement=audio+"\n"+marker.replace("function startTour(){","function startTour(){startScore();")
+          s=s.replace(marker,replacement,1)
+          # Fade the score if the viewer exits the guided journey early or returns home.
+          s=s.replace("function home(){state='idle';","function home(){if(state==='tour')stopScore();state='idle';",1)
+          s=s.replace("function freeMode(){state='free';","function freeMode(){if(state==='tour')stopScore();state='free';",1)
+          p.write_text(s)
+          PY
+      - name: Commit score
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Add dramatic atmospheric score to cinematic journey"
+          git push

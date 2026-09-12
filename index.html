@@ -1,1 +1,52 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>The Sky Tablet — Enter Ancient Mesopotamia</title><meta name="description" content="An evidence-aware cinematic 3D interpretation of Mesopotamian astronomical culture."><style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08101b}iframe{display:block;border:0;width:100%;height:100%;background:#08101b}</style><script src="/cinematic-score.js"></script></head><body><iframe id="experience" src="/experience.html" title="The Sky Tablet cinematic experience" allow="autoplay"></iframe><script>const f=document.querySelector('#experience');f.addEventListener('load',()=>{const d=f.contentDocument;if(!d)return;const start=d.querySelector('#start'),free=d.querySelector('#free'),home=d.querySelector('#home');start?.addEventListener('click',()=>window.SkyTabletScore?.start(),{capture:true});free?.addEventListener('click',()=>window.SkyTabletScore?.stop());home?.addEventListener('click',()=>window.SkyTabletScore?.stop())});</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>The Sky Tablet — Enter Ancient Mesopotamia</title>
+  <meta name="description" content="An evidence-aware cinematic 3D interpretation of Mesopotamian astronomical culture.">
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08101b}
+    iframe{display:block;border:0;width:100%;height:100%;background:#08101b}
+    #skySound{position:fixed;z-index:20;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));min-height:44px;border:1px solid #f0ca78aa;border-radius:999px;padding:10px 15px;background:#07111de8;color:#fff;font:700 12px/1 system-ui,sans-serif;letter-spacing:.08em;cursor:pointer;backdrop-filter:blur(9px);box-shadow:0 8px 30px #0008}
+    #skySound[aria-pressed="true"]{background:#9a6a2e;color:#fff4d8}
+    #skySound[data-state="blocked"],#skySound[data-state="unavailable"]{border-color:#ff9d9d;color:#ffd0d0}
+    #skySoundStatus{position:fixed;z-index:20;top:66px;right:14px;max-width:min(25rem,calc(100vw - 28px));padding:8px 10px;border-radius:8px;background:#421313ed;color:#ffe0e0;font:600 12px/1.35 system-ui,sans-serif}
+    #skySoundStatus:not([data-error="true"]){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+  <script src="/cinematic-score.js"></script>
+</head>
+<body>
+  <button id="skySound" type="button" aria-pressed="false" data-state="ready">SOUND READY</button>
+  <p id="skySoundStatus" role="status" aria-live="polite">Cinematic score is ready to play.</p>
+  <iframe id="experience" src="/experience.html" title="The Sky Tablet cinematic experience" allow="autoplay"></iframe>
+  <script>
+    const frame = document.querySelector('#experience');
+    const sound = document.querySelector('#skySound');
+    const status = document.querySelector('#skySoundStatus');
+    const startScore = () => window.SkyTabletScore?.start();
+    const stopScore = () => window.SkyTabletScore?.stop();
+
+    sound.addEventListener('click', () => {
+      if (sound.getAttribute('aria-pressed') === 'true') stopScore();
+      else startScore();
+    });
+    window.addEventListener('sky-tablet:audio-state', event => {
+      const { state, message } = event.detail;
+      sound.dataset.state = state;
+      sound.setAttribute('aria-pressed', String(state === 'playing'));
+      sound.textContent = state === 'playing' ? 'SOUND PLAYING' : state === 'ready' ? 'SOUND READY' : 'SOUND BLOCKED — RETRY';
+      status.textContent = message;
+      status.dataset.error = String(state === 'blocked' || state === 'unavailable');
+    });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopScore(); });
+    frame.addEventListener('load', () => {
+      const documentInFrame = frame.contentDocument;
+      if (!documentInFrame) return;
+      documentInFrame.querySelector('#start')?.addEventListener('click', startScore, { capture: true });
+      documentInFrame.querySelector('#free')?.addEventListener('click', stopScore);
+      documentInFrame.querySelector('#home')?.addEventListener('click', stopScore);
+    });
+  </script>
+</body>
+</html>

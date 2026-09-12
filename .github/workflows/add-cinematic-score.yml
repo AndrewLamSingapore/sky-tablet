@@ -33,6 +33,17 @@ jobs:
               raise SystemExit('index.html does not load cinematic-score.js')
           if 'SkyTabletScore' not in index or 'SkyTabletScore' not in score:
               raise SystemExit('cinematic score controls are not wired')
+          for contract in (
+              'id="skySound"',
+              'SOUND BLOCKED — RETRY',
+              "role=\"status\" aria-live=\"polite\"",
+              "document.addEventListener('visibilitychange'",
+          ):
+              if contract not in index:
+                  raise SystemExit(f'missing visible audio control contract: {contract}')
+          for contract in ('523.25', '659.25', '783.99', "report('playing'", "report('blocked'"):
+              if contract not in score:
+                  raise SystemExit(f'missing audible score contract: {contract}')
 
           conflict_markers = ('<<<<<<<', '=======', '>>>>>>>')
           for path in required:

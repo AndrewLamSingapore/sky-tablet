@@ -1,3 +1,5 @@
+> Portfolio authority: [one current JARVIS SSOT](https://github.com/AndrewLamSingapore/prime/blob/main/governance/operational-manifest.json). This document describes this repository only; it cannot override the canonical architecture or establish live deployment status.
+
 # Sky Tablet — Cinematic 3D production target
 
 The 3D experience must open on a canonical tableau whose composition reads like a painterly Mesopotamian historical illustration, then reveal genuine depth through dramatic parallax and directed camera motion.

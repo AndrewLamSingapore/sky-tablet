@@ -1,3 +1,5 @@
+> Portfolio authority: [one current JARVIS SSOT](https://github.com/AndrewLamSingapore/prime/blob/main/governance/operational-manifest.json). This document describes this repository only; it cannot override the canonical architecture or establish live deployment status.
+
 # The Sky Tablet
 
 [**Open The Sky Tablet ↗**](https://sky-tablet.vercel.app/) · [**Discuss this project**](https://authority-engine-app.vercel.app/contact?source=sky-tablet) · [**Meet Andrew Lam**](https://authority-engine-app.vercel.app/about)

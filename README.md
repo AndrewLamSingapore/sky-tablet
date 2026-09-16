@@ -34,3 +34,5 @@ python -m http.server 8000
 ```
 
 Operational deployment identity is recorded in the portfolio’s canonical PRIME manifest, referenced by `SSOT.json`. Source changes and passing tests do not by themselves prove deployment.
+
+Canonical portfolio record: https://github.com/AndrewLamSingapore/prime/blob/main/governance/operational-manifest.json

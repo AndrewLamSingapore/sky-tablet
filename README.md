@@ -25,8 +25,11 @@ If the experience interests you, **star this repository** to keep it within reac
 - A bounded visible-time camera clock, continuous transitions and orientation-preserving free exploration
 - Wide sky framing on portrait, landscape and desktop, with MUL and three labeled planets visible together; a Wide sky shortcut
 - Touch controls, with movement paused while reading the creator invitation
+- Human-scale inscribed tablet with rounded edges, recessed wedge geometry and a stone display base
 - Detailed tablet provenance available through Evidence lens instead of covering the cinematic reveal
-- Generated photographic-style material textures, naturalistic dusk lighting, human-scale figures, palms and architecture
+- Generated photographic-style masonry textures, layered temple terraces, 52 stair treads, recessed sanctuary, parapets and roof beams
+- Linen-like material response, varied skin tones, finer facial geometry and subtle breathing/head movement on nearby figures
+- Directional dusk lighting, tighter shadow coverage, flickering lamps and a Temple view shortcut
 - Distant point stars, a small moon and Venus, with an educational sky interpretation
 - Instanced repeated geometry and bounded lighting to limit rendering overhead
 - Clear routes to Andrew, JARVIS PRIME, VELYQUA, The Portal and Living Worlds

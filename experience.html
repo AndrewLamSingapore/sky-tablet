@@ -49,7 +49,7 @@ const root=document.querySelector('#world'),caption=document.querySelector('#cap
 const connectPanel=document.querySelector('#connectPanel'),connectButton=document.querySelector('#connect');
 function showConnect(show=true){connectPanel.hidden=!show;connectButton.setAttribute('aria-expanded',String(show))}
 document.querySelector('#closeConnect').onclick=()=>{showConnect(false);connectButton.focus()};connectButton.onclick=()=>showConnect(connectPanel.hidden);
-const scene=new THREE.Scene();const celestialSky=new THREE.Group();scene.add(celestialSky);const celestialOrigin=new THREE.Vector3(0,70,250);scene.background=new THREE.Color(0x0f1625);scene.fog=new THREE.FogExp2(0x736255,.0038);
+const scene=new THREE.Scene();const celestialSky=new THREE.Group();scene.add(celestialSky);const celestialOrigin=new THREE.Vector3(0,70,250);scene.background=new THREE.Color(0x0f1625);scene.fog=new THREE.FogExp2(0x736255,.0024);
 const camera=new THREE.PerspectiveCamera(40,root.clientWidth/root.clientHeight,.1,1500);
 let baseFov=40;
 function setLens(f=baseFov){baseFov=f;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(f)/2)*Math.max(1,1/camera.aspect)));camera.updateProjectionMatrix()}
@@ -65,9 +65,12 @@ const skyDome=new THREE.Mesh(new THREE.SphereGeometry(650,40,24),new THREE.Shade
 const tagged=[];function tag(o,k='interpretive'){o.userData.kind=k;tagged.push(o);return o}function add(o,k='interpretive'){scene.add(tag(o,k));return o}
 function box(x,y,z,w,h,d,m=M.clay,k='interpretive'){const q=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);q.position.set(x,y,z);q.castShadow=q.receiveShadow=true;return add(q,k)}
 function cyl(x,y,z,r,h,m=M.dark,k='interpretive',seg=12){const q=new THREE.Mesh(new THREE.CylinderGeometry(r,r*1.02,h,seg),m);q.position.set(x,y,z);q.castShadow=q.receiveShadow=true;return add(q,k)}
-scene.add(new THREE.HemisphereLight(0x91a7c2,0x705038,.95));const sun=new THREE.DirectionalLight(0xffd3a1,2.6);sun.position.set(-65,35,48);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-75;sun.shadow.camera.right=75;sun.shadow.camera.top=100;sun.shadow.camera.bottom=-100;sun.shadow.bias=-.0003;sun.shadow.normalBias=.06;sun.shadow.radius=3;scene.add(sun);const rim=new THREE.DirectionalLight(0x8197bd,.6);rim.position.set(55,32,-42);scene.add(rim);
+scene.add(new THREE.HemisphereLight(0x91a7c2,0x705038,1.25));const sun=new THREE.DirectionalLight(0xffd3a1,2.6);sun.position.set(-65,35,48);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-75;sun.shadow.camera.right=75;sun.shadow.camera.top=100;sun.shadow.camera.bottom=-100;sun.shadow.bias=-.0003;sun.shadow.normalBias=.06;sun.shadow.radius=3;scene.add(sun);const rim=new THREE.DirectionalLight(0x8197bd,.8);rim.position.set(55,32,-42);scene.add(rim);
 const moon=new THREE.Mesh(new THREE.SphereGeometry(2.1,32,24),new THREE.MeshBasicMaterial({color:0xffebbb}));moon.position.set(95,170,-450);celestialSky.add(moon);const moonGlow=new THREE.PointLight(0xbed5ff,1.2,220,2);moonGlow.position.copy(moon.position);scene.add(moonGlow);
-box(0,-.8,6,180,1.6,330,M.road,'interpretive');box(-23,.05,4,24,.2,330,M.dark,'imagined');box(23,.05,4,24,.2,330,M.dark,'imagined');
+// Continuous landscape hides any finite platform edge from the aerial camera.
+const terrainMaterial=material(tClay,0x806f58,.99,.025);const terrainMap=tClay.clone();terrainMap.repeat.set(1200,1200);terrainMap.needsUpdate=true;terrainMaterial.map=terrainMap;terrainMaterial.bumpMap=terrainMap;
+const terrain=new THREE.Mesh(new THREE.PlaneGeometry(12000,12000,1,1),terrainMaterial);terrain.rotation.x=-Math.PI/2;terrain.position.y=-.06;terrain.receiveShadow=true;scene.add(tag(terrain,'imagined'));terrain.userData.landscape=true;
+box(0,-.12,6,15,.2,330,M.road,'interpretive');box(-23,.05,4,24,.2,330,M.dark,'imagined');box(23,.05,4,24,.2,330,M.dark,'imagined');
 function battlements(x,y,z,w,count,m,k='interpretive'){const span=w/count;for(let i=0;i<count;i++)box(x-w/2+span*(i+.5),y,z,span*.64,3.1,7,m,k)}
 function frieze(x,y,z,w,count=8){for(let i=0;i<count;i++){const p=new THREE.Mesh(new THREE.BoxGeometry(w/count*.5,.8,.5),M.gold);p.position.set(x-w/2+(i+.5)*(w/count),y,z);p.castShadow=true;scene.add(tag(p,'evidence'));}}
 function relief(side,z,y=7.2,scale=1){const g=new THREE.Group();const body=new THREE.Mesh(new THREE.BoxGeometry(3.0*scale,.9*scale,.24),M.gold);const head=new THREE.Mesh(new THREE.SphereGeometry(.42*scale,8,6),M.gold);const neck=new THREE.Mesh(new THREE.BoxGeometry(.35*scale,.25*scale,.22),M.gold);const leg1=new THREE.Mesh(new THREE.BoxGeometry(.16*scale,.95*scale,.16),M.gold),leg2=leg1.clone(),leg3=leg1.clone(),leg4=leg1.clone();head.position.set(1.5*scale,.18*scale,.1);neck.position.set(1.0*scale,.05*scale,.1);leg1.position.set(-.85*scale,-.85*scale,0);leg2.position.set(-.2*scale,-.85*scale,0);leg3.position.set(.45*scale,-.85*scale,0);leg4.position.set(1.1*scale,-.85*scale,0);g.add(body,head,neck,leg1,leg2,leg3,leg4);g.position.set(side*18.8,y,z);g.scale.x=side;scene.add(tag(g,'evidence'))}
@@ -94,7 +97,9 @@ function gateFacade(){
 }
 gateFacade();
 box(0,.08,-42,15,.16,90,M.dark,'imagined');
-for(const s of[-1,1]){box(s*14,1.6,-42,10,3.2,90,M.dark,'imagined')}
+box(14,1.6,-42,10,3.2,90,M.clay,'imagined');
+// Open the western court at the tablet: no retaining wall across its sightline.
+box(-14,1.6,-16.5,10,3.2,39,M.clay,'imagined');box(-14,1.6,-83,10,3.2,8,M.clay,'imagined');
 const livingFlames=[];
 for(const x of[-11.5,-7.5,7.5,11.5]){torch(x,-18,3.1);torch(x,-46,3.1)}
 for(const s of[-1,1]){box(s*33,9,4,18,18,20,M.clay,'interpretive');battlements(s*33,19.3,4,18,4,M.clay,'interpretive');box(s*50,8,16,16,16,26,M.clay,'imagined')}
@@ -201,6 +206,28 @@ market(-30,-20,1);market(30,-38,-1);market(-28,-62,-1);
 function compound(x,z,w,d,h,k='imagined'){box(x,h/2,z,w,h,d,M.clay,k);box(x+w*.24,h*.79,z-d*.08,w*.42,h*.56,d*.5,M.clay,k);if(Math.random()>.45)box(x-w*.2,h*.66,z+d*.12,w*.18,h*.36,d*.24,M.clay,k);battlements(x,h+.75,z,w,Math.max(3,Math.round(w/4)),M.clay,k);for(let dx=-w/2+2;dx<w/2;dx+=3.4){if(Math.round(dx*10+z)%3===0)litWindow(x+dx,h*.62,z+d/2+.03,Math.abs(Math.round(x+dx+z)));else box(x+dx,h*.62,z+d/2+.02,.65,1.1,.06,M.dark,k);box(x+dx,h*.62+.62,z+d/2+.1,1.0,.18,.24,M.wood,k)}box(x,1.25,z+d/2+.04,1.3,2.5,.08,M.wood,k)}
 for(const z of[-24,-44,-66,-90,-114])for(const s of[-1,1])compound(s*(29+(Math.abs(z)%3)*3),z,13+(Math.abs(z)%4)*2,14+(Math.abs(z)%5),7.5+(Math.abs(z)%4),z>-55?'interpretive':'imagined');
 // Architectural interpretation: layered masonry, human-scale access and recessed sanctuary.
+const districtMaterials=[0x9b8168,0xa68a6b,0x927b66,0xad9171].map(color=>material(tClay,color,.96,.06));
+const cityHomes=[];
+function courtyardHome(x,z,w,d,h,seed){
+ const m=districtMaterials[seed%4],wall=2.5,courtW=w-wall*2,courtD=d-wall*2;
+ // Four wings surround an open courtyard; flat inhabited roofs replace fortress blocks.
+ const wings=[[x-wall/2-courtW/2,z,wall,d],[x+wall/2+courtW/2,z,wall,d],[x,z-d/2+wall/2,courtW,wall],[x,z+d/2-wall/2,courtW,wall]];
+ for(const [cx,cz,ww,dd] of wings){box(cx,h/2,cz,ww,h,dd,m,'imagined');box(cx,h+.06,cz,ww+.12,.12,dd+.12,M.road,'imagined')}
+ for(const side of [-1,1]){box(x+side*(w/2-.13),h+.24,z,.26,.48,d,m,'imagined');box(x,h+.24,z+side*(d/2-.13),w,.48,.26,m,'imagined')}
+ box(x, .025,z,courtW,.05,courtD,M.road,'imagined');
+ box(x+(seed%2?1:-1)*w*.2,1.15,z+d/2+.015,1.05,2.3,.035,M.wood,'imagined');
+ if(seed%3===0)litWindow(x-w*.23,Math.min(h*.65,3.2),z+d/2+.04,seed);
+ if(seed%4===0){box(x+w*.26,h+.8,z-d*.2,2.3,1.6,2.7,m,'imagined');box(x+w*.26,h+1.68,z-d*.2,2.5,.16,2.9,M.wood,'imagined')}
+ cityHomes.push({x,z,w,d,h});
+}
+for(let row=0;row<15;row++)for(let col=0;col<18;col++){
+ const seed=row*31+col*17,x=(col-8.5)*24+Math.sin(row*1.7)*3,z=(row-7)*25-30;
+ if(Math.abs(x)<53&&z>-155&&z<125)continue;
+ if((row===4||row===10)&&col>3&&col<15)continue; // Cross-city streets and small squares.
+ courtyardHome(x,z,[12,14,16][seed%3],[12,16,18][(seed+1)%3],[3.2,4.6,6.2][(seed+2)%3],seed);
+}
+// Broad avenues remain flush with the terrain; no model-platform sidewalls.
+for(const z of [-105,45])box(0,-.018,z,450,.04,5,M.road,'imagined');
 function ziggurat(x,z){
  const tierHeight=3.4;
  const masonry=[0x9b8168,0xa1876c,0xa98d72,0xb29678].map(color=>material(tClay,color,.94,.07));
@@ -266,11 +293,11 @@ function roundedTablet(){
  }
  face.computeVertexNormals();const front=new THREE.Mesh(face,artifactMaterial);tabletGroup.add(front);
  tabletGroup.traverse(m=>{if(m.isMesh){m.castShadow=true;m.receiveShadow=true}});
- // Low stone display with a supported, slightly reclined artifact at human scale.
- box(-9.4,.49,-60.5,.88,.98,.70,M.road,'interpretive');
- box(-9.4,1.005,-60.5,1.0,.07,.82,M.stone,'interpretive');
- box(-9.4,1.09,-60.53,.36,.10,.20,M.wood,'interpretive');
- tabletGroup.position.set(-9.4,1.47,-60.5);tabletGroup.rotation.set(-.13,.42,0);scene.add(tag(tabletGroup,'interpretive'));return tabletGroup;
+ // Restore the monumental tablet display while retaining physically recessed marks.
+ box(-12,.45,-61,3.8,.9,3.3,M.road,'interpretive');
+ box(-12,.94,-61,4.6,.10,3.6,M.stone,'interpretive');
+ tabletGroup.scale.set(4.3/.48,6.8/.72,.8/.065);tabletGroup.userData.monumentalDisplay=true;
+ tabletGroup.position.set(-12,4.4,-60.5);tabletGroup.rotation.set(0,.25,0);scene.add(tag(tabletGroup,'interpretive'));return tabletGroup;
 }
 const tablet=roundedTablet();torch(-10.5,-59,2.3);
 const dustPositions=new Float32Array(480*3);for(let i=0;i<480;i++){dustPositions[i*3]=(Math.random()-.5)*120;dustPositions[i*3+1]=Math.random()*26;dustPositions[i*3+2]=Math.random()*220-120}
@@ -320,13 +347,13 @@ scene.traverse(o=>{if(!o.isMesh||!o.material?.isMeshStandardMaterial||o.material
 for(const group of instanceGroups.values()){if(group.items.length<3)continue;const batch=new THREE.InstancedMesh(group.geometry,group.material,group.items.length);group.items.forEach((o,i)=>{batch.setMatrixAt(i,o.matrixWorld);o.removeFromParent()});batch.castShadow=batch.receiveShadow=true;scene.add(tag(batch,group.kind))}
 const canonicalPos=new THREE.Vector3(0,10.2,101),canonicalTarget=new THREE.Vector3(0,11,8);camera.position.copy(canonicalPos);camera.lookAt(canonicalTarget);
 let state='idle',tourElapsed=0,tabletDismissed=false,evidenceOn=false,drag=false,lx=0,ly=0,yaw=Math.PI,pitch=0;const keys={},orig=new Map();
-const shots=[{p:[0,10.2,101],t:[0,11,8],f:40,d:4.8,c:'A monumental city at dusk — held still like a painting.'},{p:[0,8.8,78],t:[0,11,5],f:36,d:4.6,c:'Torchlight, figures and glazed brick separate into depth.'},{p:[0,6.9,55],t:[0,10,2],f:33,d:4.8,c:'The gate grows from image into architecture.'},{p:[0,5.5,28],t:[0,7,-4],f:32,d:4.8,c:'Cross the threshold.'},{p:[2.2,4.7,-5],t:[-2,4.5,-28],f:38,d:4.5,c:'Beyond the gate, the processional world continues beyond the canvas.'},{p:[-5.8,2.6,-53],t:[-9.4,1.47,-60.5],f:34,d:5.4,c:'The tablet waits in the side court — encountered, not blocking the way.'},{p:[-8.2,1.9,-58],t:[-9.4,1.47,-60.5],f:38,d:4.7,c:'Marks pressed into clay become a way of holding the sky.'},{p:[0,70,250],t:[0,150,-120],f:72,d:6.6,c:'From clay to cosmos. The city rests beneath a wide, open sky.'},{p:[0,80,265],t:[0,155,-120],f:72,d:5.2,c:'MUL means “star”. Venus, Jupiter and Mars shine across an illustrative night sky.'},{p:[0,90,280],t:[0,160,-120],f:72,d:6.4,c:'Hold the whole sky. Follow your curiosity.'}];
+const shots=[{p:[0,10.2,101],t:[0,11,8],f:40,d:4.8,c:'A monumental city at dusk — held still like a painting.'},{p:[0,8.8,78],t:[0,11,5],f:36,d:4.6,c:'Torchlight, figures and glazed brick separate into depth.'},{p:[0,6.9,55],t:[0,10,2],f:33,d:4.8,c:'The gate grows from image into architecture.'},{p:[0,5.5,28],t:[0,7,-4],f:32,d:4.8,c:'Cross the threshold.'},{p:[2.2,4.7,-5],t:[-2,4.5,-28],f:38,d:4.5,c:'Beyond the gate, the processional world continues beyond the canvas.'},{p:[-3.5,5.8,-40],t:[-12,4.4,-60.5],f:34,d:5.4,c:'The tablet waits in the side court — encountered, not blocking the way.'},{p:[-7.4,5.3,-46],t:[-12,4.4,-60.5],f:38,d:4.7,c:'Marks pressed into clay become a way of holding the sky.'},{p:[0,70,250],t:[0,150,-120],f:72,d:6.6,c:'From clay to cosmos. The city rests beneath a wide, open sky.'},{p:[0,80,265],t:[0,155,-120],f:72,d:5.2,c:'MUL means “star”. Venus, Jupiter and Mars shine across an illustrative night sky.'},{p:[95,98,145],t:[0,4,-38],f:58,d:8,c:'The city below — courtyards, quiet streets and warm light beneath the stars.'}];
 function ease(t){return t<.5?16*t*t*t*t*t:1-Math.pow(-2*t+2,5)/2}
 function clearInput(){drag=false;for(const key of Object.keys(keys))delete keys[key]}
-function home(){skyDome.material.uniforms.horizon.value.set(0xbb8862);skyDome.material.uniforms.zenith.value.set(0x101e35);showConnect(false);state='idle';root.dataset.mode=state;clearInput();tourElapsed=0;tabletDismissed=false;camera.position.copy(canonicalPos);setLens(40);camera.lookAt(canonicalTarget);modeLabel.textContent='CANONICAL TABLEAU';caption.textContent=shots[0].c;paths.forEach(p=>p.material.opacity=0);pathLabels.forEach(s=>s.material.opacity=0);threePathsLabel.material.opacity=0;skyLabels.forEach(s=>s.material.opacity=0);tabletCard.style.display='none';syncSky()}
+function home(){scene.fog.color.set(0x736255);skyDome.material.uniforms.horizon.value.set(0xbb8862);skyDome.material.uniforms.zenith.value.set(0x101e35);showConnect(false);state='idle';root.dataset.mode=state;clearInput();tourElapsed=0;tabletDismissed=false;camera.position.copy(canonicalPos);setLens(40);camera.lookAt(canonicalTarget);modeLabel.textContent='CANONICAL TABLEAU';caption.textContent=shots[0].c;paths.forEach(p=>p.material.opacity=0);pathLabels.forEach(s=>s.material.opacity=0);threePathsLabel.material.opacity=0;skyLabels.forEach(s=>s.material.opacity=0);tabletCard.style.display='none';syncSky()}
 function freeMode(){const direction=camera.getWorldDirection(new THREE.Vector3());yaw=Math.atan2(direction.x,direction.z);pitch=Math.asin(THREE.MathUtils.clamp(direction.y,-1,1));state='free';root.dataset.mode=state;clearInput();modeLabel.textContent='FREE EXPLORE';caption.textContent='Drag to look. Use WASD / arrow keys or mobile controls to move.';tabletCard.style.display='none'}
 function startTour(){home();state='tour';root.dataset.mode=state;modeLabel.textContent='GUIDED JOURNEY';tour(0)}
-function tour(sec){let acc=0,i=0;for(;i<shots.length-1;i++){if(sec<acc+shots[i].d)break;acc+=shots[i].d}if(i>=shots.length-1&&sec>acc+shots[i].d){freeMode();showConnect();return}const A=shots[i],B=shots[Math.min(i+1,shots.length-1)],u=ease(Math.max(0,Math.min(1,(sec-acc)/A.d)));camera.position.lerpVectors(new THREE.Vector3(...A.p),new THREE.Vector3(...B.p),u);if(i===6)camera.position.y+=Math.sin(Math.PI*u)*60;camera.lookAt(new THREE.Vector3(...A.t).lerp(new THREE.Vector3(...B.t),u));setLens(THREE.MathUtils.lerp(A.f,B.f,u));caption.textContent=A.c;const reveal=Math.max(0,Math.min(1,(sec-28)/6));paths.forEach((p,n)=>p.material.opacity=evidenceOn?reveal*(.10+n*.035):0);pathLabels.forEach((s,n)=>s.material.opacity=evidenceOn?reveal*(.68+n*.1):0);threePathsLabel.material.opacity=evidenceOn?reveal*.75:0;skyLabels.forEach(s=>s.material.opacity=reveal);skyDome.material.uniforms.horizon.value.set(0xbb8862).lerp(new THREE.Color(0x34243e),reveal);skyDome.material.uniforms.zenith.value.set(0x101e35).lerp(new THREE.Color(0x030817),reveal);tabletCard.style.display=evidenceOn&&!tabletDismissed?'block':'none';const glow=Math.max(0,Math.sin(Math.min(1,reveal)*Math.PI));vg.intensity=7+glow*2.6;venusTrail.forEach((b,idx)=>b.material.opacity=(0.02*idx)+glow*(0.01*idx));syncSky()}
+function tour(sec){let acc=0,i=0;for(;i<shots.length-1;i++){if(sec<acc+shots[i].d)break;acc+=shots[i].d}if(i>=shots.length-1&&sec>acc+shots[i].d){freeMode();showConnect();return}const A=shots[i],B=shots[Math.min(i+1,shots.length-1)],u=ease(Math.max(0,Math.min(1,(sec-acc)/A.d)));camera.position.lerpVectors(new THREE.Vector3(...A.p),new THREE.Vector3(...B.p),u);if(i===6)camera.position.y+=Math.sin(Math.PI*u)*60;camera.lookAt(new THREE.Vector3(...A.t).lerp(new THREE.Vector3(...B.t),u));setLens(THREE.MathUtils.lerp(A.f,B.f,u));caption.textContent=A.c;const reveal=Math.max(0,Math.min(1,(sec-28)/6));paths.forEach((p,n)=>p.material.opacity=evidenceOn?reveal*(.10+n*.035):0);pathLabels.forEach((s,n)=>s.material.opacity=evidenceOn?reveal*(.68+n*.1):0);threePathsLabel.material.opacity=evidenceOn?reveal*.75:0;skyLabels.forEach(s=>s.material.opacity=reveal);scene.fog.color.set(0x736255).lerp(new THREE.Color(0x39424c),reveal*.65);skyDome.material.uniforms.horizon.value.set(0xbb8862).lerp(new THREE.Color(0x34243e),reveal);skyDome.material.uniforms.zenith.value.set(0x101e35).lerp(new THREE.Color(0x030817),reveal);tabletCard.style.display=evidenceOn&&!tabletDismissed?'block':'none';const glow=Math.max(0,Math.sin(Math.min(1,reveal)*Math.PI));vg.intensity=7+glow*2.6;venusTrail.forEach((b,idx)=>b.material.opacity=(0.02*idx)+glow*(0.01*idx));syncSky()}
 function evidence(){evidenceOn=!evidenceOn;legend.style.display=evidenceOn?'block':'none';tagged.forEach(o=>{if(!o.material)return;if(!orig.has(o))orig.set(o,o.material);if(evidenceOn){const c=o.userData.kind==='evidence'?0x62d39a:o.userData.kind==='imagined'?0xa989e3:0xe0b65e;o.material=new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.87})}else o.material=orig.get(o)});if(evidenceOn)tabletCard.style.display='block';else if(state!=='tour')tabletCard.style.display='none'}
 document.querySelector('#templeView').onclick=()=>{home();camera.position.set(32,23,-76);camera.lookAt(new THREE.Vector3(0,9,-120));setLens(48);freeMode();modeLabel.textContent='TEMPLE · ARCHITECTURAL INTERPRETATION';caption.textContent='Masonry terraces, a stepped ascent and the sanctuary above. Drag to explore.'};
 document.querySelector('#wideSky').onclick=()=>{showConnect(false);tour(shots.slice(0,7).reduce((sum,shot)=>sum+shot.d,0));freeMode();root.dataset.mode='panorama';modeLabel.textContent='WIDE SKY · ILLUSTRATIVE PLANET POSITIONS';caption.textContent='MUL — “star” · Venus, Jupiter and Mars. Drag to look around.'};

@@ -23,9 +23,10 @@ If the experience interests you, **star this repository** to keep it within reac
 ## Current implementation
 
 - A bounded visible-time camera clock, continuous transitions and orientation-preserving free exploration
+- A final aerial city shot with courtyard neighborhoods, alleys, varied rooflines and horizon-scale terrain
 - Wide sky framing on portrait, landscape and desktop, with MUL and three labeled planets visible together; a Wide sky shortcut
 - Touch controls, with movement paused while reading the creator invitation
-- Human-scale inscribed tablet with rounded edges, recessed wedge geometry and a stone display base
+- Monumental inscribed tablet restored at the previous display scale with rounded edges, recessed wedge geometry and a stone display base
 - Detailed tablet provenance available through Evidence lens instead of covering the cinematic reveal
 - Generated photographic-style masonry textures, layered temple terraces, 52 stair treads, recessed sanctuary, parapets and roof beams
 - Distinct adult men and women, varied builds and hairstyles, linen-like material response, varied skin tones and finer facial geometry and subtle breathing/head movement on nearby figures

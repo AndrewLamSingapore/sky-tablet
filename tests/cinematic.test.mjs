@@ -18,7 +18,7 @@ function experience() {
     setSize() {} setPixelRatio() {} render() {}
   }
   class Loader { load() { return new THREE.Texture(); } }
-  const api = new Function('THREE', 'document', 'addEventListener', 'requestAnimationFrame', 'performance', 'devicePixelRatio', source + '\nreturn {camera,scene,shots,paths,skyLabels,skyPoints,celestialSky,venusDirection,home,startTour,tour,freeMode,roam,loop,keys, get elapsed(){return tourElapsed}, get state(){return state}};')(
+  const api = new Function('THREE', 'document', 'addEventListener', 'requestAnimationFrame', 'performance', 'devicePixelRatio', source + '\nreturn {camera,scene,shots,tablet,cityHomes,terrain,paths,skyLabels,skyPoints,celestialSky,venusDirection,home,startTour,tour,freeMode,roam,loop,keys, get elapsed(){return tourElapsed}, get state(){return state}};')(
     { ...THREE, WebGLRenderer: Renderer, TextureLoader: Loader }, document,
     (name, fn) => events[name] = fn, () => {}, { now: () => 0 }, 1
   );
@@ -106,7 +106,7 @@ test('wide sky keeps Venus, MUL and all path geometry inside the view', () => {
     world.elements.get('#world').clientHeight=height;
     world.events.resize();world.startTour();
     const start=world.shots.slice(0,7).reduce((sum,shot)=>sum+shot.d,0);
-    for(let time=start;time<51.7;time+=.25){
+    for(let time=start;time<start+world.shots[7].d;time+=.25){
       world.tour(time);world.camera.updateMatrixWorld(true);
       const points=[...world.skyPoints.map(p=>world.celestialSky.localToWorld(p.clone())),...world.skyLabels.map(s=>s.getWorldPosition(new THREE.Vector3()))];
       for(const path of world.paths){const positions=path.geometry.attributes.position;for(let i=0;i<positions.count;i+=10)points.push(new THREE.Vector3().fromBufferAttribute(positions,i));}
@@ -136,4 +136,35 @@ test('scene retains distinct palm crowns, adults and bounded moving shadows', ()
   assert.equal(shadowLights.length,2);
   const before=shadowLights.map(o=>o.position.clone());world.loop(12345);
   shadowLights.forEach((o,i)=>assert.ok(o.position.distanceTo(before[i])>0&&o.position.distanceTo(before[i])<.05));
+});
+
+test('restored monumental tablet is large, framed and unobstructed through its encounter', () => {
+  const bounds=new THREE.Box3().setFromObject(world.tablet),size=bounds.getSize(new THREE.Vector3());
+  assert.ok(size.y>=6.7&&size.x>=4,'previous monumental display scale restored');
+  world.scene.updateMatrixWorld(true);
+  const blockers=[];world.scene.traverse(o=>{if(!o.isMesh||!o.material?.isMeshStandardMaterial)return;let p=o;while(p){if(p===world.tablet)return;p=p.parent}blockers.push(o)});
+  const start=world.shots.slice(0,5).reduce((sum,s)=>sum+s.d,0);
+  for(const [w,h] of [[390,844],[1280,800]]){
+    world.elements.get('#world').clientWidth=w;world.elements.get('#world').clientHeight=h;world.events.resize();
+    for(let fraction=0;fraction<=1;fraction+=.1){
+      world.tour(start+world.shots[5].d*fraction);world.camera.updateMatrixWorld(true);
+      for(const [x,y] of [[0,0],[-.19,-.29],[.19,-.29],[-.19,.29],[.19,.29]]){
+        const target=world.tablet.localToWorld(new THREE.Vector3(x,y,.076));
+        const ndc=target.clone().project(world.camera);
+        assert.ok(Math.abs(ndc.x)<.85&&ndc.y<.8&&ndc.y>-.7,`tablet clipped at ${w}x${h}`);
+        const delta=target.clone().sub(world.camera.position);
+        const ray=new THREE.Raycaster(world.camera.position,delta.clone().normalize(),.05,delta.length()-.1);
+        assert.equal(ray.intersectObjects(blockers,false).length,0,`tablet blocked at fraction ${fraction}`);
+      }
+    }
+  }
+});
+
+test('ending looks down over a full city on continuous terrain',()=>{
+  const start=world.shots.slice(0,-1).reduce((sum,s)=>sum+s.d,0);
+  world.tour(start+2);
+  assert.ok(world.camera.getWorldDirection(new THREE.Vector3()).y<-.35);
+  assert.ok(world.cityHomes.length>150);
+  assert.ok(world.terrain.geometry.parameters.width>=10000);
+  assert.equal(world.elements.get('#tabletCard').style.display,'none');
 });

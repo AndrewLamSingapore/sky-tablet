@@ -1,23 +1,36 @@
-> Portfolio authority: [one current JARVIS SSOT](https://github.com/AndrewLamSingapore/prime/blob/main/governance/operational-manifest.json). This document describes this repository only; it cannot override the canonical architecture or establish live deployment status.
-
 # The Sky Tablet
 
-[**Open The Sky Tablet ↗**](https://sky-tablet.vercel.app/) · [**Discuss this project**](https://authority-engine-app.vercel.app/contact?source=sky-tablet) · [**Meet Andrew Lam**](https://authority-engine-app.vercel.app/about)
+**Walk through an imagined ancient city. Look up. Find a question worth exploring.**
 
-Interactive public prototype exploring Mesopotamian astronomy and cuneiform writing.
+[**Enter the experience**](https://sky-tablet.vercel.app/) · [**Discuss a project with Andrew**](https://authority-engine-app.vercel.app/contact?source=sky-tablet&intent=collaboration) · [**Explore JARVIS PRIME**](https://authority-engine-app.vercel.app/jarvis)
 
-## Current prototype
+The current app is a Three.js cinematic environment inspired by Mesopotamian architecture, sky observation and cuneiform. It includes a guided camera journey, free exploration, a tablet encounter and a creator invitation linked to Andrew’s other projects.
 
-- MUL.APIN-inspired Three Paths sky wheel
-- Schematic Venus synodic-cycle explorer
-- Searchable introductory cuneiform sign sampler
-- Responsive, dependency-light single-page implementation
-- Explicit distinction between educational simplification and scholarly claims
+## Current implementation
 
-## Evidence policy
+- A bounded visible-time camera clock, continuous transitions and orientation-preserving free exploration
+- Portrait framing and touch controls, with movement paused while reading the creator invitation
+- Generated photographic-style material textures, naturalistic dusk lighting, human-scale figures, palms and architecture
+- Distant point stars, a small moon and Venus, with an educational sky interpretation
+- Instanced repeated geometry and bounded lighting to limit rendering overhead
+- Clear routes to Andrew, JARVIS PRIME, VELYQUA, The Portal and Living Worlds
 
-This project is educational. Simplified astronomical mappings and introductory sign glosses are not scholarly citations. Publication-grade claims should be verified against primary texts and credible Assyriological scholarship. The prototype links to ePSD2 and ETCSL for deeper reference work.
+This replaces the former README’s sky wheel, synodic-cycle explorer and searchable sign-sampler description. Those are not the current interface.
 
-## Run
+## Evidence and limits
 
-Open `index.html` in a modern browser. No build step is required.
+The scene is an interpretive software prototype, not a surveyed historical reconstruction or a date-accurate astronomical simulation. Generated textures and procedural people are not archaeological scans or photogrammetric humans. The visual target is maximum practical realism; full photorealism is not claimed.
+
+Nine regression tests exercise the shipped camera and scene logic with real Three.js geometry/math and a stubbed renderer. They do not verify GPU appearance or physical iPhone performance. See [repair and asset provenance](docs/2026-09-16-cinematic-repair.md).
+
+## Run and verify
+
+Serve this directory over HTTP, then open `index.html` in a WebGL-capable browser. `experience.html` owns the scene; `index.html` hosts the experience and sound controls.
+
+```bash
+npm ci
+npm test
+python -m http.server 8000
+```
+
+Operational deployment identity is recorded in the portfolio’s canonical PRIME manifest, referenced by `SSOT.json`. Source changes and passing tests do not by themselves prove deployment.

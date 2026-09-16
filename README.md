@@ -30,6 +30,7 @@ If the experience interests you, **star this repository** to keep it within reac
 - Generated photographic-style masonry textures, layered temple terraces, 52 stair treads, recessed sanctuary, parapets and roof beams
 - Distinct adult men and women, varied builds and hairstyles, linen-like material response, varied skin tones and finer facial geometry and subtle breathing/head movement on nearby figures
 - Individually shaped palm crowns, curved tapered leaflets, ringed trunks and subtle wind movement
+- Recessed, framed windows with independently varying warm lamp light and limited masonry spill
 - Directional dusk lighting, tighter shadow coverage, two local lamps casting moving shadows, steady dusk shadows and a Temple view shortcut
 - Distant point stars, a small moon and Venus, with an educational sky interpretation
 - Instanced repeated geometry and bounded lighting to limit rendering overhead

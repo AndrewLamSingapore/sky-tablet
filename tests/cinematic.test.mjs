@@ -168,3 +168,25 @@ test('ending looks down over a full city on continuous terrain',()=>{
   assert.ok(world.terrain.geometry.parameters.width>=10000);
   assert.equal(world.elements.get('#tabletCard').style.display,'none');
 });
+
+test('planet names remain readable and separated in the wide phone view',()=>{
+ const root=world.elements.get('#world'),lower=world.elements.get('#lower');
+ for(const [w,h,bottomHeight] of [[390,844,220],[390,660,220],[844,390,110],[1280,800,130]]){
+  root.clientWidth=w;root.clientHeight=h;lower.offsetHeight=bottomHeight;world.events.resize();
+  const start=world.shots.slice(0,7).reduce((sum,s)=>sum+s.d,0);
+  for(const time of [start,start+3,start+6]){
+   world.tour(time);
+   const boxes=['venus','jupiter','mars'].map(id=>{
+    const el=world.elements.get('#'+id+'Name');assert.equal(el.hidden,false,`${id} visible at ${w}x${h} / ${time}`);
+    return {x:parseFloat(el.style.left),y:parseFloat(el.style.top)};
+   });
+   for(let i=0;i<boxes.length;i++){
+    const a=boxes[i];assert.ok(a.x>=10&&a.x+108<=w-10&&a.y>=92&&a.y+54<=h-bottomHeight-12);
+    for(const b of boxes.slice(i+1))assert.ok(a.x+108<=b.x||b.x+108<=a.x||a.y+54<=b.y||b.y+54<=a.y,'names must not overlap');
+   }
+  }
+ }
+ root.clientWidth=1280;root.clientHeight=800;world.events.resize();world.home();
+ assert.equal(world.elements.get('#venusName').hidden,true);
+ assert.equal(world.elements.get('#skyMeaning').style.display,'none');
+});

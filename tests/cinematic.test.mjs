@@ -18,7 +18,7 @@ function experience() {
     setSize() {} setPixelRatio() {} render() {}
   }
   class Loader { load() { return new THREE.Texture(); } }
-  const api = new Function('THREE', 'document', 'addEventListener', 'requestAnimationFrame', 'performance', 'devicePixelRatio', source + '\nreturn {camera,scene,shots,paths,skyLabels,skyPoints,venusDirection,home,startTour,tour,freeMode,roam,loop,keys, get elapsed(){return tourElapsed}, get state(){return state}};')(
+  const api = new Function('THREE', 'document', 'addEventListener', 'requestAnimationFrame', 'performance', 'devicePixelRatio', source + '\nreturn {camera,scene,shots,paths,skyLabels,skyPoints,celestialSky,venusDirection,home,startTour,tour,freeMode,roam,loop,keys, get elapsed(){return tourElapsed}, get state(){return state}};')(
     { ...THREE, WebGLRenderer: Renderer, TextureLoader: Loader }, document,
     (name, fn) => events[name] = fn, () => {}, { now: () => 0 }, 1
   );
@@ -108,10 +108,32 @@ test('wide sky keeps Venus, MUL and all path geometry inside the view', () => {
     const start=world.shots.slice(0,7).reduce((sum,shot)=>sum+shot.d,0);
     for(let time=start;time<51.7;time+=.25){
       world.tour(time);world.camera.updateMatrixWorld(true);
-      const points=[...world.skyPoints,...world.skyLabels.map(s=>s.position)];
+      const points=[...world.skyPoints.map(p=>world.celestialSky.localToWorld(p.clone())),...world.skyLabels.map(s=>s.getWorldPosition(new THREE.Vector3()))];
       for(const path of world.paths){const positions=path.geometry.attributes.position;for(let i=0;i<positions.count;i+=10)points.push(new THREE.Vector3().fromBufferAttribute(positions,i));}
       for(const point of points){const screen=point.clone().project(world.camera);assert.ok(Math.abs(screen.x)<.9 && screen.y<.8 && screen.y>-.65 && screen.z<1,`clipped sky at ${width}x${height}, t=${time}: ${screen.toArray()}`);}
       assert.equal(world.elements.get('#tabletCard').style.display,'none');
     }
   }
+});
+
+test('celestial direction is unchanged by camera translation', () => {
+  world.startTour();world.tour(36);world.camera.updateMatrixWorld(true);
+  const direction=world.celestialSky.localToWorld(world.venusDirection.clone()).sub(world.camera.position).normalize();
+  world.tour(49);world.camera.updateMatrixWorld(true);
+  const after=world.celestialSky.localToWorld(world.venusDirection.clone()).sub(world.camera.position).normalize();
+  assert.ok(direction.distanceTo(after)<1e-10);
+});
+
+test('scene retains distinct palm crowns, adults and bounded moving shadows', () => {
+  const crowns=[],adults=[],shadowLights=[];
+  world.scene.traverse(o=>{
+    if(o.isMesh&&o.material?.vertexColors&&o.material?.side===THREE.DoubleSide)crowns.push(o);
+    if(o.userData.characterPresentation)adults.push(o.userData.characterPresentation);
+    if(o.isPointLight&&o.castShadow)shadowLights.push(o);
+  });
+  assert.equal(crowns.length,6);assert.equal(new Set(crowns.map(o=>o.geometry.uuid)).size,6);
+  assert.ok(adults.includes('woman')&&adults.includes('man'));
+  assert.equal(shadowLights.length,2);
+  const before=shadowLights.map(o=>o.position.clone());world.loop(12345);
+  shadowLights.forEach((o,i)=>assert.ok(o.position.distanceTo(before[i])>0&&o.position.distanceTo(before[i])<.05));
 });

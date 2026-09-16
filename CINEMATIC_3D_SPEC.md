@@ -2,20 +2,24 @@
 
 # Sky Tablet — Cinematic 3D production target
 
-The 3D experience must open on a canonical tableau whose composition reads like a painterly Mesopotamian historical illustration, then reveal genuine depth through dramatic parallax and directed camera motion.
+The 3D experience must open on a canonical tableau with naturalistic materials, human proportions and physically plausible light, then reveal genuine depth through dramatic parallax and directed camera motion.
 
 ## Required experience
 - Monumental mud-brick / glazed-brick architecture with relief detail
 - Human-scale figures, palms/reeds, lamps, atmospheric dust and stars
-- Painterly/filmic lighting rather than a generic game-engine look
+- Naturalistic dusk lighting and photographic-style materials; avoid cartoon proportions
 - Guided cinematic journey using hold, dolly, crane, threshold push-through, orbit, macro tablet encounter, celestial reveal and ascension
 - Dynamic field of view and eased spline motion
 - Free exploration from the current cinematic camera position
 - Desktop keyboard/mouse and mobile touch controls
-- Spatial Three Paths and Venus reveal
+- A distant point-star sky and Venus reveal; date-specific astronomical accuracy requires a separate validated model
 - Tablet encounter with cuneiform educational disclaimer
 - Evidence Lens: evidence-based / interpretive / imagined extension
 - Performance-conscious WebGL implementation
 
 ## Evidence rule
 The environment is an evidence-aware interpretation, not a claim to reconstruct a specific historical city. Generated geometry and staging must never be silently promoted to historical fact.
+
+## Supersession and acceptance
+
+The realism direction replaces the earlier painterly target. The source implementation and its limits are described in README.md and docs/2026-09-16-cinematic-repair.md. Camera regression success is not visual acceptance: GPU appearance, framing and frame time must be observed on a WebGL-capable device.

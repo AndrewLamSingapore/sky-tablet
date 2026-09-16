@@ -18,7 +18,7 @@ function experience() {
     setSize() {} setPixelRatio() {} render() {}
   }
   class Loader { load() { return new THREE.Texture(); } }
-  const api = new Function('THREE', 'document', 'addEventListener', 'requestAnimationFrame', 'performance', 'devicePixelRatio', source + '\nreturn {camera,scene,shots,paths,skyLabels,venusDirection,home,startTour,tour,freeMode,roam,loop,keys, get elapsed(){return tourElapsed}, get state(){return state}};')(
+  const api = new Function('THREE', 'document', 'addEventListener', 'requestAnimationFrame', 'performance', 'devicePixelRatio', source + '\nreturn {camera,scene,shots,paths,skyLabels,skyPoints,venusDirection,home,startTour,tour,freeMode,roam,loop,keys, get elapsed(){return tourElapsed}, get state(){return state}};')(
     { ...THREE, WebGLRenderer: Renderer, TextureLoader: Loader }, document,
     (name, fn) => events[name] = fn, () => {}, { now: () => 0 }, 1
   );
@@ -108,7 +108,7 @@ test('wide sky keeps Venus, MUL and all path geometry inside the view', () => {
     const start=world.shots.slice(0,7).reduce((sum,shot)=>sum+shot.d,0);
     for(let time=start;time<51.7;time+=.25){
       world.tour(time);world.camera.updateMatrixWorld(true);
-      const points=[world.venusDirection,...world.skyLabels.map(s=>s.position)];
+      const points=[...world.skyPoints,...world.skyLabels.map(s=>s.position)];
       for(const path of world.paths){const positions=path.geometry.attributes.position;for(let i=0;i<positions.count;i+=10)points.push(new THREE.Vector3().fromBufferAttribute(positions,i));}
       for(const point of points){const screen=point.clone().project(world.camera);assert.ok(Math.abs(screen.x)<.9 && screen.y<.8 && screen.y>-.65 && screen.z<1,`clipped sky at ${width}x${height}, t=${time}: ${screen.toArray()}`);}
       assert.equal(world.elements.get('#tabletCard').style.display,'none');

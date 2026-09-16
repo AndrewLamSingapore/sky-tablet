@@ -6,7 +6,7 @@
 
 [**Enter the cinematic journey →**](https://sky-tablet.vercel.app/) · [**Connect with Andrew →**](https://authority-engine-app.vercel.app/contact?source=sky-tablet&intent=collaboration&utm_source=github&utm_medium=repository&utm_campaign=sky_tablet)
 
-Start at street level. Pass through the gate. Encounter a clay tablet, then pull back into an open sky with **MUL — “star”**, **Venus** and the **Three Paths**. Switch to free exploration whenever curiosity takes over.
+Start at street level. Pass through the gate. Encounter a clay tablet, then pull back into an open sky with **MUL — “star”**, **Venus, Jupiter and Mars** and the **Three Paths**. Switch to free exploration whenever curiosity takes over.
 
 A browser-based experiment by **Andrew Lam**, bringing together cultural history, interactive storytelling and technology. Select sound to hear the original generative score. No account required.
 
@@ -23,7 +23,7 @@ If the experience interests you, **star this repository** to keep it within reac
 ## Current implementation
 
 - A bounded visible-time camera clock, continuous transitions and orientation-preserving free exploration
-- Wide sky framing on portrait, landscape and desktop, with MUL and Venus visible together
+- Wide sky framing on portrait, landscape and desktop, with MUL and three labeled planets visible together; a Wide sky shortcut
 - Touch controls, with movement paused while reading the creator invitation
 - Detailed tablet provenance available through Evidence lens instead of covering the cinematic reveal
 - Generated photographic-style material textures, naturalistic dusk lighting, human-scale figures, palms and architecture
@@ -34,6 +34,8 @@ If the experience interests you, **star this repository** to keep it within reac
 This replaces the former README’s sky wheel, synodic-cycle explorer and searchable sign-sampler description. Those are not the current interface.
 
 ## Evidence and limits
+
+Planet positions are illustrative, not a sky chart for a particular date. MUL labels sky vocabulary, not a named astronomical object.
 
 The scene is an interpretive software prototype, not a surveyed historical reconstruction or a date-accurate astronomical simulation. Generated textures and procedural people are not archaeological scans or photogrammetric humans. The visual target is maximum practical realism; full photorealism is not claimed.
 

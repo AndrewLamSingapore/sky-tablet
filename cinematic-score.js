@@ -3,6 +3,7 @@ let ctx = null;
 let master = null;
 let active = [];
 let finishTimer = null;
+let requestVersion = 0;
 
 function report(state, message) {
   window.dispatchEvent(new CustomEvent('sky-tablet:audio-state', { detail: { state, message } }));
@@ -16,6 +17,7 @@ function clearNodes(list) {
 }
 
 function stop(fade = 1, notify = true) {
+  requestVersion += 1;
   clearTimeout(finishTimer);
   finishTimer = null;
   if (!ctx || !master) {
@@ -39,11 +41,20 @@ function stop(fade = 1, notify = true) {
 function ensureContext() {
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   if (!AudioContextClass) return null;
-  if (!ctx) ctx = new AudioContextClass();
+  if (!ctx || ctx.state === 'closed') {
+    ctx = new AudioContextClass();
+    ctx.addEventListener('statechange', () => {
+      if (master && ctx.state !== 'running') {
+        stop(0);
+        report('blocked', 'Sound was interrupted. Select sound to resume.');
+      }
+    });
+  }
   return ctx;
 }
 
 function start() {
+  const request = ++requestVersion;
   const context = ensureContext();
   if (!context) {
     report('unavailable', 'Web Audio is unavailable in this browser.');
@@ -51,6 +62,7 @@ function start() {
   }
 
   const build = () => {
+    if (request !== requestVersion) return false;
     if (context.state !== 'running') {
       report('blocked', 'The browser blocked sound. Select SOUND READY to try again.');
       return false;

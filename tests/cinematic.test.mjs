@@ -18,7 +18,7 @@ function experience() {
     setSize() {} setPixelRatio() {} render() {}
   }
   class Loader { load() { return new THREE.Texture(); } }
-  const api = new Function('THREE', 'document', 'addEventListener', 'requestAnimationFrame', 'performance', 'devicePixelRatio', source + '\nreturn {camera,scene,shots,home,startTour,tour,freeMode,roam,loop,keys, get elapsed(){return tourElapsed}, get state(){return state}};')(
+  const api = new Function('THREE', 'document', 'addEventListener', 'requestAnimationFrame', 'performance', 'devicePixelRatio', source + '\nreturn {camera,scene,shots,paths,skyLabels,venusDirection,home,startTour,tour,freeMode,roam,loop,keys, get elapsed(){return tourElapsed}, get state(){return state}};')(
     { ...THREE, WebGLRenderer: Renderer, TextureLoader: Loader }, document,
     (name, fn) => events[name] = fn, () => {}, { now: () => 0 }, 1
   );
@@ -97,4 +97,21 @@ test('portrait framing preserves a usable horizontal view', () => {
   world.events.resize();world.home();
   const horizontal=2*Math.atan(Math.tan(THREE.MathUtils.degToRad(world.camera.fov)/2)*world.camera.aspect);
   assert.ok(horizontal>=THREE.MathUtils.degToRad(39.9));
+});
+
+
+test('wide sky keeps Venus, MUL and all path geometry inside the view', () => {
+  for (const [width,height] of [[390,844],[844,390],[1280,800]]) {
+    world.elements.get('#world').clientWidth=width;
+    world.elements.get('#world').clientHeight=height;
+    world.events.resize();world.startTour();
+    const start=world.shots.slice(0,7).reduce((sum,shot)=>sum+shot.d,0);
+    for(let time=start;time<51.7;time+=.25){
+      world.tour(time);world.camera.updateMatrixWorld(true);
+      const points=[world.venusDirection,...world.skyLabels.map(s=>s.position)];
+      for(const path of world.paths){const positions=path.geometry.attributes.position;for(let i=0;i<positions.count;i+=10)points.push(new THREE.Vector3().fromBufferAttribute(positions,i));}
+      for(const point of points){const screen=point.clone().project(world.camera);assert.ok(Math.abs(screen.x)<.9 && screen.y<.8 && screen.y>-.65 && screen.z<1,`clipped sky at ${width}x${height}, t=${time}: ${screen.toArray()}`);}
+      assert.equal(world.elements.get('#tabletCard').style.display,'none');
+    }
+  }
 });

@@ -28,6 +28,7 @@
   <iframe id="experience" src="/experience.html" title="The Sky Tablet cinematic experience" allow="autoplay"></iframe>
   <script>
     const frame = document.querySelector('#experience');
+    if (new URLSearchParams(location.search).get('scene') === 'tablet') frame.src = '/experience.html?scene=tablet';
     const sound = document.querySelector('#skySound');
     const status = document.querySelector('#skySoundStatus');
     const startScore = () => window.SkyTabletScore?.start();

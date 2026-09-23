@@ -84,7 +84,7 @@ test('tablet dismissal remains dismissed without moving the tour clock', () => {
   assert.equal(world.elements.get('#tabletCard').style.display,'none');assert.equal(world.api.elapsed,before);
 });
 
-test('the build note is on the stone and reading pauses then resumes the journey', () => {
+test('the build note is printed on the stone and opens its reader', () => {
   const stoneNote=world.tablet.children.find(child=>child.userData.stoneNote);
   assert.ok(stoneNote?.material.map?.isCanvasTexture,'note must be printed on the tablet mesh');
   world.startTour();
@@ -102,7 +102,22 @@ test('the build note is on the stone and reading pauses then resumes the journey
   const before=world.api.elapsed;world.loop(1000);
   assert.equal(world.api.elapsed,before,'tour pauses while the note is open');
   world.elements.get('#closeTablet').onclick();world.loop(1016);
-  assert.ok(world.api.elapsed>before,'tour resumes on close');
+  assert.ok(world.api.elapsed>before,'a direct camera test remains controllable');
+});
+
+test('the public journey stops at the tablet until Continue journey is chosen', () => {
+  const journey=experience();journey.startTour();
+  for(let step=1;step<=760;step++)journey.loop(step*40);
+  const pauseAt=journey.shots.slice(0,6).reduce((sum,shot)=>sum+shot.d,0);
+  assert.ok(Math.abs(journey.api.elapsed-pauseAt)<.001);
+  assert.equal(journey.elements.get('#continueJourney').dataset.visible,'true');
+  assert.equal(journey.elements.get('#stoneHint').dataset.visible,'true');
+  journey.elements.get('#stoneHint').onclick();
+  assert.equal(journey.elements.get('#continueJourney').dataset.visible,'false');
+  journey.elements.get('#closeTablet').onclick();
+  journey.loop(31000);assert.equal(journey.api.elapsed,pauseAt,'closing the note does not skip to the sky');
+  journey.elements.get('#continueJourney').onclick();
+  journey.loop(31040);assert.ok(journey.api.elapsed>pauseAt,'explicit continue resumes the camera');
 });
 
 test('every scene control has a working state transition', () => {

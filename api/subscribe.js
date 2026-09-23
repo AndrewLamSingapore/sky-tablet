@@ -1,8 +1,11 @@
 // Vercel Node function. Set BUTTONDOWN_API_KEY in server environment variables.
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
+  if (req.method === 'GET') {
+    return res.status(200).json({ configured: Boolean(process.env.BUTTONDOWN_API_KEY) });
+  }
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
+    res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ error: 'Method not allowed' });
   }
   if (req.body?.website) {

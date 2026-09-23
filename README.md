@@ -28,6 +28,7 @@ If the experience interests you, **star this repository** to keep it within reac
 - Touch controls, with movement paused while reading the creator invitation
 - Monumental inscribed tablet restored at the previous display scale with rounded edges, recessed wedge geometry and a stone display base
 - Detailed tablet provenance available through Evidence lens instead of covering the cinematic reveal
+- Public build notes linked from the Evidence lens, with optional email updates through a server-side Buttondown route
 - Generated photographic-style masonry textures, layered temple terraces, 52 stair treads, recessed sanctuary, parapets and roof beams
 - Distinct adult men and women, varied builds and hairstyles, linen-like material response, varied skin tones and finer facial geometry and subtle breathing/head movement on nearby figures
 - Individually shaped palm crowns, curved tapered leaflets, ringed trunks and subtle wind movement
@@ -56,6 +57,8 @@ npm ci
 npm test
 python -m http.server 8000
 ```
+
+Email signup requires a server-only `BUTTONDOWN_API_KEY` environment variable in Vercel. Notes remain public at `/notes.html` and do not require an email address.
 
 Operational deployment identity is recorded in the portfolio’s canonical PRIME manifest, referenced by `SSOT.json`. Source changes and passing tests do not by themselves prove deployment.
 

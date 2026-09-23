@@ -11,15 +11,29 @@ function response() {
   };
 }
 
-test('subscription endpoint rejects unsupported methods and invalid email', async () => {
+test('subscription endpoint reports configuration and rejects unsupported methods and invalid email', async () => {
+  const originalKey = process.env.BUTTONDOWN_API_KEY;
+  delete process.env.BUTTONDOWN_API_KEY;
   let res = response();
   await handler({ method: 'GET', body: {} }, res);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.configured, false);
+
+  process.env.BUTTONDOWN_API_KEY = 'test-key';
+  res = response();
+  await handler({ method: 'GET', body: {} }, res);
+  assert.equal(res.body.configured, true);
+
+  res = response();
+  await handler({ method: 'PUT', body: {} }, res);
   assert.equal(res.statusCode, 405);
-  assert.equal(res.headers.get('Allow'), 'POST');
+  assert.equal(res.headers.get('Allow'), 'GET, POST');
 
   res = response();
   await handler({ method: 'POST', body: { email: 'invalid' } }, res);
   assert.equal(res.statusCode, 400);
+  if (originalKey === undefined) delete process.env.BUTTONDOWN_API_KEY;
+  else process.env.BUTTONDOWN_API_KEY = originalKey;
 });
 
 test('subscription endpoint does not call Buttondown for honeypot submissions', async () => {

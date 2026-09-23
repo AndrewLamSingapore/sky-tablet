@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import handler from '../api/subscribe.js';
+import handler from '../api/evidence-updates.js';
 
 function response() {
   return {

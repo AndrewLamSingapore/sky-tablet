@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Andrew's notes — Sky Tablet</title>
+<link rel="stylesheet" href="/authority-family.css?v=1">
+<style>
+/* ============================================================
+   TO ADD A NEW NOTE: scroll to the NOTES array below and copy
+   one entry, paste it above or below, edit the fields. That's
+   the whole process — no build step, no other file to touch.
+   Write `body` as plain paragraphs separated by a blank line;
+   **bold** and *italic* and `- ` bullet lines are supported.
+   ============================================================ */
+</style>
+</head>
+<body>
+<script>
+const NOTES = [
+  {
+    id: "001",
+    title: "What the Evidence lens is actually for",
+    date: "2026-09-20",
+    tag: "Sky Tablet",
+    teaser: "The gap between a scene that looks convincing and a scene that's been checked — and why I built a separate lens for it instead of hiding the seams.",
+    body: `
+It would have been easy to make the Sky Tablet look more certain than it is. Generated masonry textures, procedural crowds, a night sky with three planets placed for composition rather than a specific date — none of that is hard to dress up as archaeology if nobody asks.
+
+So I built the Evidence lens as a separate mode instead of a footnote. Free exploration and the cinematic path show you the interpretation. Switching lenses shows you what's actually load-bearing: which parts come from MUL.APIN and cuneiform sky vocabulary, which parts are illustrative composition, and which parts are just software doing what software does — instanced geometry, bounded lighting, a camera clock.
+
+**The rule I kept coming back to:** if a claim needs the Evidence lens to be true, it doesn't get to appear in the cinematic view unlabeled. Planet positions are illustrative, not a sky chart for a date — that sentence lives in the lens, not buried in a changelog.
+
+None of this is a compliance step I bolted on at the end. It's closer to how I'd want a systems audit to work — the confident version and the checked version should never be allowed to blur into each other, especially when one of them is more fun to look at.
+
+- Camera regression tests exercise real Three.js geometry and math against a stubbed renderer — they confirm the logic, not the GPU appearance
+- Operational deployment identity lives in the portfolio's canonical manifest, not in "the tests passed"
+- If I can't cite it, it goes in as *interpretation*, plainly marked, not as fact
+
+More of these as the build continues. If you want the next one when it's up, there's a way to get on that list from wherever you found this.
+`
+  },
+
+  // ---- next note goes here ----
+  // {
+  //   id: "002",
+  //   title: "",
+  //   date: "YYYY-MM-DD",
+  //   tag: "",
+  //   teaser: "",
+  //   body: `...`
+  // },
+];
+</script>
+
+<style>
+  :root{
+    --void:#060809;
+    --clay:#C67C4E;
+    --clay-deep:#6B4128;
+    --clay-shadow:#2E1B10;
+    --mint:#6EEBC4;
+    --parchment:#F2E9DA;
+    --muted:#9C8770;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:inherit}
+  html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+  body{
+    min-height:100%;
+    margin:0;
+    background:var(--void);
+    background-image:radial-gradient(ellipse at 50% -10%, #10151b 0%, var(--void) 55%);
+    color:var(--parchment);
+    font-family:"Newsreader Variable",Georgia,serif;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  .fog-layer{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+  }
+  .fog-blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(75px);
+    mix-blend-mode:screen;
+    will-change:transform;
+  }
+  .fog-a{
+    width:65vw; height:65vw; max-width:480px; max-height:480px;
+    left:-12%; top:4%;
+    background:radial-gradient(circle, rgba(198,124,78,0.18), rgba(198,124,78,0) 70%);
+    animation:driftA 48s ease-in-out infinite;
+  }
+  .fog-b{
+    width:55vw; height:55vw; max-width:420px; max-height:420px;
+    right:-16%; top:45%;
+    background:radial-gradient(circle, rgba(110,235,196,0.09), rgba(110,235,196,0) 70%);
+    animation:driftB 58s ease-in-out infinite;
+  }
+  .fog-c{
+    width:48vw; height:48vw; max-width:380px; max-height:380px;
+    left:15%; bottom:-18%;
+    background:radial-gradient(circle, rgba(242,233,218,0.06), rgba(242,233,218,0) 70%);
+    animation:driftC 64s ease-in-out infinite;
+  }
+  @keyframes driftA{ 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(4%,3%) scale(1.08);} }
+  @keyframes driftB{ 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-5%,-4%) scale(1.05);} }
+  @keyframes driftC{ 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(3%,-3%) scale(1.1);} }
+
+  .wrap{ position:relative; z-index:1; max-width:600px; margin:0 auto; padding:36px 20px 60px; }
+
+  h1.page-title{
+    font-family:"Bricolage Grotesque Variable","Segoe UI",system-ui,sans-serif;
+    font-weight:600;
+    font-size:26px;
+    margin:0 0 6px;
+  }
+  p.page-sub{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+    margin:0 0 28px;
+    max-width:40ch;
+  }
+
+  .card{
+    position:relative;
+    background:linear-gradient(155deg, #B97A4F 0%, var(--clay) 45%, var(--clay-deep) 100%);
+    border-radius:16px 20px 14px 22px;
+    padding:20px 20px 18px;
+    margin-bottom:16px;
+    box-shadow:
+      inset 0 2px 3px rgba(255,255,255,0.15),
+      inset 0 -8px 16px rgba(0,0,0,0.3),
+      0 16px 30px -16px rgba(0,0,0,0.65);
+    cursor:pointer;
+    transition:transform .18s ease;
+  }
+  .card:hover{ transform:translateY(-2px); }
+
+  .card .meta{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    font-size:12px;
+    color:rgba(6,8,9,0.55);
+    margin-bottom:8px;
+  }
+  .card .tag{
+    background:rgba(6,8,9,0.18);
+    padding:2px 9px;
+    border-radius:999px;
+    font-weight:600;
+  }
+  .card h2{
+    font-family:"Bricolage Grotesque Variable","Segoe UI",system-ui,sans-serif;
+    font-weight:600;
+    font-size:19px;
+    margin:0 0 6px;
+    color:#1C110A;
+  }
+  .card p{
+    font-size:14px;
+    line-height:1.5;
+    color:rgba(28,17,10,0.75);
+    margin:0;
+  }
+
+  /* Reading view */
+  .reader{
+    display:none;
+    position:relative;
+  }
+  .reader.open{ display:block; }
+  .list.hidden{ display:none; }
+
+  .back{
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-family:"Bricolage Grotesque Variable","Segoe UI",system-ui,sans-serif;
+    font-size:14px;
+    padding:0 0 22px;
+    cursor:pointer;
+  }
+  .back:hover{ color:var(--parchment); }
+
+  .reader-glow{
+    pointer-events:none;
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle 320px at var(--mx,50%) var(--my,30%), rgba(198,124,78,0.08), transparent 70%);
+    transition:background .1s linear;
+  }
+
+  article h1{
+    font-family:"Bricolage Grotesque Variable","Segoe UI",system-ui,sans-serif;
+    font-weight:600;
+    font-size:26px;
+    line-height:1.3;
+    margin:0 0 10px;
+  }
+  article .meta{
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:24px;
+  }
+  article p{
+    font-size:16px;
+    line-height:1.7;
+    color:rgba(242,233,218,0.9);
+    margin:0 0 18px;
+    max-width:56ch;
+  }
+  article strong{ color:var(--mint); font-weight:600; }
+  article ul{ margin:0 0 18px; padding-left:20px; }
+  article li{ font-size:15px; line-height:1.65; color:rgba(242,233,218,0.85); margin-bottom:6px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .card, .reader-glow{ transition:none !important; }
+    .fog-blob{ animation:none !important; }
+  }
+</style>
+
+<div class="fog-layer" aria-hidden="true">
+  <div class="fog-blob fog-a"></div>
+  <div class="fog-blob fog-b"></div>
+  <div class="fog-blob fog-c"></div>
+</div>
+<div class="reader-glow" id="glow"></div>
+
+<div class="wrap">
+  <nav aria-label="Sky Tablet"><a class="back" href="/" style="display:inline-block;text-decoration:none">← Return to Sky Tablet</a></nav>
+  <div id="list-view" class="list">
+    <h1 class="page-title">Notes from the build</h1>
+    <p class="page-sub">Short write-ups on how each piece gets made — sourcing, decisions, and what's interpretation versus evidence.</p>
+    <div id="cards"></div>
+  </div>
+
+  <div id="reader-view" class="reader">
+    <button class="back" id="back-btn">← Back to notes</button>
+    <article id="article-body"></article>
+  </div>
+</div>
+
+<script>
+  function renderInline(text){
+    return escapeHtml(text)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>');
+  }
+  function escapeHtml(text){
+    return String(text).replace(/[&<>"']/g, c => ({
+      '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+    })[c]);
+  }
+
+  function renderBody(raw){
+    const blocks = raw.trim().split(/\n\s*\n/);
+    return blocks.map(block => {
+      const lines = block.trim().split('\n');
+      if (lines.every(l => l.trim().startsWith('- '))){
+        const items = lines.map(l => `<li>${renderInline(l.replace(/^- /,''))}</li>`).join('');
+        return `<ul>${items}</ul>`;
+      }
+      return `<p>${renderInline(block.trim())}</p>`;
+    }).join('');
+  }
+
+  const cardsEl = document.getElementById('cards');
+  const listView = document.getElementById('list-view');
+  const readerView = document.getElementById('reader-view');
+  const articleEl = document.getElementById('article-body');
+
+  NOTES.forEach(note => {
+    const card = document.createElement('a');
+    card.className = 'card';
+    card.href = '#' + encodeURIComponent(note.id);
+    card.style.display = 'block';
+    card.style.textDecoration = 'none';
+    card.innerHTML = `
+      <div class="meta"><span class="tag">${escapeHtml(note.tag)}</span><span>${escapeHtml(note.date)}</span></div>
+      <h2>${escapeHtml(note.title)}</h2>
+      <p>${escapeHtml(note.teaser)}</p>
+    `;
+    cardsEl.appendChild(card);
+  });
+
+  function openNote(id){
+    const note = NOTES.find(n => n.id === id);
+    if (!note) { closeNote(false); return; }
+    articleEl.innerHTML = `
+      <h1>${escapeHtml(note.title)}</h1>
+      <div class="meta">${escapeHtml(note.tag)} · ${escapeHtml(note.date)}</div>
+      ${renderBody(note.body)}
+    `;
+    listView.classList.add('hidden');
+    readerView.classList.add('open');
+    window.scrollTo({top:0});
+  }
+
+  function closeNote(clearHash = true){
+    readerView.classList.remove('open');
+    listView.classList.remove('hidden');
+    if (clearHash && window.location.hash) window.location.hash = '';
+  }
+
+  document.getElementById('back-btn').addEventListener('click', closeNote);
+
+  function syncHash(){
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (id) openNote(id);
+    else closeNote(false);
+  }
+  window.addEventListener('hashchange', syncHash);
+  syncHash();
+
+  // Lamp-light vignette follows touch/pointer while reading
+  const glow = document.getElementById('glow');
+  window.addEventListener('pointermove', e => {
+    glow.style.setProperty('--mx', e.clientX + 'px');
+    glow.style.setProperty('--my', e.clientY + 'px');
+  });
+</script>
+</body>
+</html>

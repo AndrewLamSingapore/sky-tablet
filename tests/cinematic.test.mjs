@@ -11,7 +11,7 @@ function experience() {
   source = source.replace(/let THREE;try\{THREE=await import[^\n]+\n/, '');
   const elements = new Map(), events = {};
   const context = new Proxy({}, { get: (_, key) => key === 'createLinearGradient' ? () => ({ addColorStop() {} }) : () => {} });
-  const element = () => ({ style: {}, dataset: {}, clientWidth: 1280, clientHeight: 800, prepend() {}, setAttribute() {}, focus() {}, setPointerCapture() {}, getContext: () => context });
+  const element = () => ({ style: {}, dataset: {}, clientWidth: 1280, clientHeight: 800, prepend() {}, setAttribute() {}, focus() {}, setPointerCapture() {}, getBoundingClientRect: () => ({left:0,top:0,width:1280,height:800}), getContext: () => context });
   const document = { hidden: false, querySelector(selector) { if (!elements.has(selector)) elements.set(selector, element()); return elements.get(selector); }, querySelectorAll: () => [], createElement: element, addEventListener: (name, fn) => events[name] = fn };
   class Renderer {
     domElement = element(); shadowMap = {}; capabilities = { getMaxAnisotropy: () => 8 };
@@ -82,6 +82,42 @@ test('tablet dismissal remains dismissed without moving the tour clock', () => {
   world.startTour();world.tour(31.8);world.elements.get('#closeTablet').onclick();
   const before=world.api.elapsed;world.tour(31.9);
   assert.equal(world.elements.get('#tabletCard').style.display,'none');assert.equal(world.api.elapsed,before);
+});
+
+test('the build note is on the stone and reading pauses then resumes the journey', () => {
+  const stoneNote=world.tablet.children.find(child=>child.userData.stoneNote);
+  assert.ok(stoneNote?.material.map?.isCanvasTexture,'note must be printed on the tablet mesh');
+  world.startTour();
+  const encounter=world.shots.slice(0,5).reduce((sum,shot)=>sum+shot.d,0)+world.shots[5].d*.7;
+  world.tour(encounter);
+  assert.equal(world.elements.get('#stoneHint').dataset.visible,'true');
+  world.scene.updateMatrixWorld(true);
+  const center=stoneNote.getWorldPosition(new THREE.Vector3()).project(world.camera);
+  assert.ok(Math.abs(center.x)<1&&Math.abs(center.y)<1,'stone note is in the encounter camera');
+  // The accessible button and a ray through the visible stone reach the note.
+  const ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2(center.x,center.y),world.camera);
+  assert.ok(ray.intersectObject(stoneNote,false).length);
+  world.elements.get('#stoneHint').onclick();
+  assert.equal(world.elements.get('#tabletCard').style.display,'block');
+  const before=world.api.elapsed;world.loop(1000);
+  assert.equal(world.api.elapsed,before,'tour pauses while the note is open');
+  world.elements.get('#closeTablet').onclick();world.loop(1016);
+  assert.ok(world.api.elapsed>before,'tour resumes on close');
+});
+
+test('every scene control has a working state transition', () => {
+  const tap=id=>world.elements.get(id).onclick();
+  tap('#home');assert.equal(world.api.state,'idle');
+  tap('#start');assert.equal(world.api.state,'tour');
+  tap('#free');assert.equal(world.api.state,'free');
+  tap('#wideSky');assert.equal(world.elements.get('#world').dataset.mode,'panorama');
+  tap('#templeView');assert.equal(world.api.state,'free');
+  tap('#evidence');assert.equal(world.elements.get('#tabletCard').style.display,'block');
+  tap('#closeTablet');assert.equal(world.elements.get('#tabletCard').style.display,'none');
+  tap('#evidence');assert.equal(world.elements.get('#tabletCard').style.display,'none');
+  tap('#connect');assert.equal(world.elements.get('#connectPanel').hidden,false);
+  tap('#closeConnect');assert.equal(world.elements.get('#connectPanel').hidden,true);
+  tap('#home');assert.equal(world.api.state,'idle');
 });
 
 test('end of journey offers a conversation and pauses free movement while reading', () => {

@@ -238,7 +238,7 @@ More of these as the build continues. If you want the next one when it's up, the
 <div class="reader-glow" id="glow"></div>
 
 <div class="wrap">
-  <nav aria-label="Sky Tablet"><a class="back" href="/" style="display:inline-block;text-decoration:none">← Return to Sky Tablet</a></nav>
+  <nav aria-label="Sky Tablet"><a class="back" id="return-to-scene" href="/" style="display:inline-block;text-decoration:none">← Return to Sky Tablet</a></nav>
   <div id="list-view" class="list">
     <h1 class="page-title">Notes from the build</h1>
     <p class="page-sub">Short write-ups on how each piece gets made — sourcing, decisions, and what's interpretation versus evidence.</p>
@@ -252,6 +252,10 @@ More of these as the build continues. If you want the next one when it's up, the
 </div>
 
 <script>
+  if (new URLSearchParams(location.search).get('from') === 'tablet') {
+    document.getElementById('return-to-scene').href = '/?scene=tablet';
+    document.getElementById('return-to-scene').textContent = '← Return to the stone tablet';
+  }
   function renderInline(text){
     return escapeHtml(text)
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')

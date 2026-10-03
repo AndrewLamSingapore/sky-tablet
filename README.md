@@ -60,6 +60,4 @@ python -m http.server 8000
 
 Email signup requires a server-only `BUTTONDOWN_API_KEY` environment variable in Vercel. Notes remain public at `/notes.html` and do not require an email address.
 
-Operational deployment identity is recorded in the portfolio’s canonical PRIME manifest, referenced by `SSOT.json`. Source changes and passing tests do not by themselves prove deployment.
-
-Canonical portfolio record: https://github.com/AndrewLamSingapore/prime/blob/main/governance/operational-manifest.json
+Current portfolio status authority is [PRIME STATUS.md](https://github.com/AndrewLamSingapore/prime/blob/main/STATUS.md). The [operational manifest](https://github.com/AndrewLamSingapore/prime/blob/main/governance/operational-manifest.json), referenced by `SSOT.json`, is a component and observation reference; it cannot establish current deployment status. Source changes and passing tests do not by themselves prove deployment.

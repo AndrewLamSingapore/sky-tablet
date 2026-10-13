@@ -27,8 +27,8 @@ If the experience interests you, **star this repository** to keep it within reac
 - Wide sky framing on portrait, landscape and desktop, with MUL and three labeled planets visible together; a Wide sky shortcut
 - Touch controls, with movement paused while reading the creator invitation
 - Monumental inscribed tablet restored at the previous display scale with rounded edges, recessed wedge geometry and a stone display base
-- Detailed tablet provenance available through Evidence lens instead of covering the cinematic reveal
-- Public build notes linked from the Evidence lens, with optional email updates through a server-side Buttondown route
+- Detailed tablet provenance available through Interpretation Lens instead of covering the cinematic reveal
+- Public build notes linked from the Interpretation Lens, with optional email updates through a server-side Buttondown route
 - Generated photographic-style masonry textures, layered temple terraces, 52 stair treads, recessed sanctuary, parapets and roof beams
 - Distinct adult men and women, varied builds and hairstyles, linen-like material response, varied skin tones and finer facial geometry and subtle breathing/head movement on nearby figures
 - Individually shaped palm crowns, curved tapered leaflets, ringed trunks and subtle wind movement
@@ -46,7 +46,7 @@ Planet positions are illustrative, not a sky chart for a particular date. MUL la
 
 The scene is an interpretive software prototype, not a surveyed historical reconstruction or a date-accurate astronomical simulation. Generated textures and procedural people are not archaeological scans or photogrammetric humans. The visual target is maximum practical realism; full photorealism is not claimed.
 
-Camera regression tests exercise the shipped camera and scene logic with real Three.js geometry/math and a stubbed renderer. They do not verify GPU appearance or physical iPhone performance. See [repair and asset provenance](docs/2026-09-16-cinematic-repair.md).
+Camera regression tests exercise the shipped camera and scene logic with real Three.js geometry/math and a stubbed renderer. They do not verify GPU appearance or physical iPhone performance. See [repair and asset provenance](docs/2026-09-16-cinematic-repair.md) and [Interpretation Lens purpose and ownership](docs/INTERPRETATION_LENS_ARCHITECTURE.md).
 
 ## Run and verify
 

@@ -36,7 +36,7 @@ If the experience interests you, **star this repository** to keep it within reac
 - Directional dusk lighting, tighter shadow coverage, two local lamps casting moving shadows, steady dusk shadows and a Temple view shortcut
 - Distant point stars, a small moon and Venus, with an educational sky interpretation
 - Instanced repeated geometry and bounded lighting to limit rendering overhead
-- Clear routes to Andrew, JARVIS PRIME, VELYQUA, The Portal and Living Worlds
+- Clear routes to Andrew, ORQEVIA, VELYQUA, The Portal and Living Worlds
 
 This replaces the former README’s sky wheel, synodic-cycle explorer and searchable sign-sampler description. Those are not the current interface.
 

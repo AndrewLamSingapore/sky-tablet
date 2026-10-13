@@ -60,4 +60,4 @@ python -m http.server 8000
 
 Email signup requires a server-only `BUTTONDOWN_API_KEY` environment variable in Vercel. Notes remain public at `/notes.html` and do not require an email address.
 
-Current portfolio status authority is [PRIME STATUS.md](https://github.com/AndrewLamSingapore/prime/blob/main/STATUS.md). The [operational manifest](https://github.com/AndrewLamSingapore/prime/blob/main/governance/operational-manifest.json), is a component and observation reference; it cannot establish current deployment status. Source changes and passing tests do not by themselves prove deployment.
+Portfolio status: [STATUS.md](https://github.com/AndrewLamSingapore/orqevia/blob/main/STATUS.md) is the sole portfolio status reference. Each product owns its source, configuration, contracts and domain records. The [operational manifest](https://github.com/AndrewLamSingapore/orqevia/blob/main/governance/operational-manifest.json) provides dated ORQEVIA component and observation references; it does not establish deployment status.

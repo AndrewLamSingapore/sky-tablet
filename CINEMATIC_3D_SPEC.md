@@ -14,7 +14,7 @@ The 3D experience must open on a canonical tableau with naturalistic materials, 
 - Desktop keyboard/mouse and mobile touch controls
 - A distant point-star sky and Venus reveal; date-specific astronomical accuracy requires a separate validated model
 - Tablet encounter with cuneiform educational disclaimer
-- Evidence Lens: evidence-based / interpretive / imagined extension
+- Interpretation Lens: evidence-based / interpretive / imagined extension
 - Performance-conscious WebGL implementation
 
 ## Evidence rule

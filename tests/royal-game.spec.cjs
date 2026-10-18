@@ -83,3 +83,27 @@ test('capture, protected rosette and bonus turn rules', async ({page})=>{
   });
   expect(out).toEqual({captured:true,blocked:true,extra:true});
 });
+
+test('zero roll skips turn and AI completes its turn without a JS exception',async({page})=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(gameUrl);
+ await page.evaluate(()=>{Math.random=()=>0.99});
+ await page.locator('#roll').click();
+ await expect(page.locator('#board .piece')).toHaveCount(0);
+ await expect(page.locator('#roll')).toBeEnabled();
+ expect(errors).toEqual([]);
+});
+test('iPhone-sized touch input, scroll and article navigation',async({page,browserName})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto(gameUrl);
+ await page.evaluate(()=>{Math.random=()=>0.1});
+ await page.locator('#roll').tap();
+ await expect(page.locator('#board .cell.legal').first()).toBeVisible();
+ await page.locator('#board .cell.legal').first().tap();
+ await expect(page.locator('#board .piece.human')).toHaveCount(1);
+ await page.getByRole('heading',{name:'Further reading and attribution'}).scrollIntoViewIfNeeded();
+ await expect(page.getByRole('heading',{name:'Further reading and attribution'})).toBeVisible();
+ await expect(page.getByRole('link',{name:/base-60 mathematics/i}).first()).toHaveAttribute('href','/base-60.html');
+ const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
+ expect(overflow).toBeLessThanOrEqual(0);
+});

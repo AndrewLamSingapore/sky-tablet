@@ -6,6 +6,7 @@ on:
       - 'royal-game-of-ur.html'
       - 'experience.html'
       - 'tests/royal-game.spec.cjs'
+      - 'playwright.config.cjs'
       - '.github/workflows/royal-game-regression.yml'
   workflow_dispatch:
 jobs:

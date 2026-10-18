@@ -107,3 +107,27 @@ test('iPhone-sized touch input, scroll and article navigation',async({page,brows
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
  expect(overflow).toBeLessThanOrEqual(0);
 });
+
+test('Interpretation Lens hub and source registry link all learning modules',async({page})=>{
+ await page.goto('http://127.0.0.1:8765/interpretation-lens.html');
+ await expect(page.getByRole('heading',{name:'Interpretation Lens'})).toBeVisible();
+ await expect(page.getByRole('link',{name:/Play and learn/})).toHaveAttribute('href','/royal-game-of-ur.html');
+ await expect(page.getByRole('link',{name:/Examine the evidence/})).toHaveAttribute('href','/sources.html');
+ await page.getByLabel('I can explain a base-60 place value.').check();
+ await expect(page.locator('#progress')).toHaveText('1 of 4 stages completed.');
+ await page.reload();
+ await expect(page.getByLabel('I can explain a base-60 place value.')).toBeChecked();
+ await page.getByRole('button',{name:'Reset my checklist'}).click();
+ await expect(page.locator('#progress')).toHaveText('0 of 4 stages completed.');
+ await page.goto('http://127.0.0.1:8765/sources.html');
+ await expect(page.getByRole('heading',{name:'Historical source library'})).toBeVisible();
+});
+test('optional game hint never automatically moves a piece',async({page})=>{
+ await page.goto(gameUrl);
+ await page.evaluate(()=>{Math.random=()=>0.1});
+ await expect(page.locator('#hint')).toBeDisabled();
+ await page.locator('#roll').click();
+ await page.locator('#hint').click();
+ await expect(page.locator('#status')).toContainText('Hint:');
+ await expect(page.locator('#board .piece')).toHaveCount(0);
+});

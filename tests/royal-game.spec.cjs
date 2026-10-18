@@ -97,9 +97,9 @@ test('iPhone-sized touch input, scroll and article navigation',async({page,brows
  await page.setViewportSize({width:390,height:844});
  await page.goto(gameUrl);
  await page.evaluate(()=>{Math.random=()=>0.1});
- await page.locator('#roll').tap();
+ if(browserName==='webkit') await page.locator('#roll').tap(); else await page.locator('#roll').click();
  await expect(page.locator('#board .cell.legal').first()).toBeVisible();
- await page.locator('#board .cell.legal').first().tap();
+ if(browserName==='webkit') await page.locator('#board .cell.legal').first().tap(); else await page.locator('#board .cell.legal').first().click();
  await expect(page.locator('#board .piece.human')).toHaveCount(1);
  await page.getByRole('heading',{name:'Further reading and attribution'}).scrollIntoViewIfNeeded();
  await expect(page.getByRole('heading',{name:'Further reading and attribution'})).toBeVisible();

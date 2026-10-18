@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - 'royal-game-of-ur.html'
+      - 'interpretation-lens.html'
+      - 'sources.html'
+      - 'base-60.html'
       - 'experience.html'
       - 'tests/royal-game.spec.cjs'
       - 'playwright.config.cjs'

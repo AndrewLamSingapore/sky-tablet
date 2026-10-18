@@ -15,7 +15,7 @@ test('research article and board render without JavaScript errors', async ({ pag
 test('dice roll, legal move, AI turn, and restart', async ({ page }) => {
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(gameUrl);
-  await page.evaluate(()=>{Math.random=()=>0.9});
+  await page.evaluate(()=>{Math.random=()=>0.1});
   await page.locator('#roll').click();
   await expect(page.locator('#dice')).toHaveText('4');
   await expect(page.locator('#board .cell.legal').first()).toBeVisible();

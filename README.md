@@ -50,14 +50,19 @@ Camera regression tests exercise the shipped camera and scene logic with real Th
 
 ## Run and verify
 
-Serve this directory over HTTP, then open `index.html` in a WebGL-capable browser. `experience.html` owns the scene; `index.html` hosts the experience and sound controls.
+Run the build-backed local server, then open http://127.0.0.1:8765 in a WebGL-capable browser. The build copies the locked Three.js modules into the site; no external CDN is required. `experience.html` owns the scene; `index.html` hosts the experience and sound controls.
 
 ```bash
 npm ci
 npm test
-python -m http.server 8000
+npm run test:browser
+npm run serve
 ```
+
+Install test browsers once with `npx playwright install --with-deps chromium webkit`. CI uses Node 24 and the committed dependency lock. Browser checks run on every pull request and main push.
 
 Email signup requires a server-only `BUTTONDOWN_API_KEY` environment variable in Vercel. Notes remain public at `/notes.html` and do not require an email address.
 
 Portfolio status: [STATUS.md](https://github.com/AndrewLamSingapore/orqevia/blob/main/STATUS.md) is the sole portfolio status reference. Each product owns its source, configuration, contracts and domain records. The [operational manifest](https://github.com/AndrewLamSingapore/orqevia/blob/main/governance/operational-manifest.json) provides dated ORQEVIA component and observation references; it does not establish deployment status.
+
+Subscription routes share origin validation, an eight-second provider timeout and best-effort per-instance throttling (five requests per client in ten minutes). Distributed abuse protection requires a platform WAF rule. Missing credentials leave signup unavailable and display a notice; they do not count as a verified delivery integration.

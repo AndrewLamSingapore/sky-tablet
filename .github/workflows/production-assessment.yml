@@ -1,0 +1,57 @@
+name: Production end-to-end assessment
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  production-assessment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SKY_BASE_URL: https://sky-tablet.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Wait for the exact source to reach production and check API contracts
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlopen, Request
+          from urllib.error import HTTPError
+          import time, json
+          site='https://sky-tablet.vercel.app'
+          for attempt in range(36):
+              try:
+                  with urlopen(site+'/royal-game-of-ur.html',timeout=15) as response:
+                      if response.read()==Path('royal-game-of-ur.html').read_bytes(): break
+              except Exception: pass
+              time.sleep(5)
+          else: raise SystemExit('Production has not reached the expected source')
+          for path in ['index.html','experience.html','notes.html','interpretation-lens.html','base-60.html','sources.html','royal-game-of-ur.html']:
+              with urlopen(site+'/'+path,timeout=15) as response:
+                  assert response.read()==Path(path).read_bytes(), path+' differs from expected source'
+                  assert response.headers.get('X-Frame-Options')=='SAMEORIGIN'
+                  assert "frame-ancestors 'self'" in response.headers.get('Content-Security-Policy','')
+          for path in ['/api/subscribe','/api/evidence-updates']:
+              with urlopen(site+path,timeout=15) as response:
+                  configured=json.load(response)['configured']
+                  print(path+': configured='+str(configured)+'; delivery needs separate provider acceptance')
+              request=Request(site+path,data=b'{"email":"invalid"}',headers={'Content-Type':'application/json'},method='POST')
+              try: urlopen(request,timeout=15);raise AssertionError('Invalid email accepted')
+              except HTTPError as error: assert error.code==400, error.code
+          print('Exact production pages, security headers and API validation: PASS')
+          PY
+      - run: npm run test:browser -- --reporter=line
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: production-browser-failure-evidence
+          path: test-results/
+          retention-days: 7

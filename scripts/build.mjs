@@ -1,4 +1,4 @@
-import { cp, mkdir, copyFile, rm, readFile, writeFile } from 'node:fs/promises';
+import { cp, mkdir, copyFile, rm } from 'node:fs/promises';
 const pages = ['index.html', 'experience.html', 'interpretation-lens.html', 'base-60.html', 'royal-game-of-ur.html', 'sources.html', 'notes.html', 'scored-shell.html'];
 await rm('public', {recursive:true, force:true});
 await mkdir('public/vendor', {recursive:true});

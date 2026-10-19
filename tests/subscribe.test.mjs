@@ -71,3 +71,30 @@ test('subscription endpoint forwards a valid address and handles provider errors
   if (originalKey === undefined) delete process.env.BUTTONDOWN_API_KEY;
   else process.env.BUTTONDOWN_API_KEY = originalKey;
 });
+
+
+test('subscription rejects foreign origins, bounds requests, and handles network failures', async () => {
+  let res = response();
+  await handler({method:'POST',headers:{origin:'https://untrusted.example'},body:{email:'reader@example.com'}},res);
+  assert.equal(res.statusCode,403);
+  for(let i=0;i<5;i++) {
+    res=response();
+    await handler({method:'POST',headers:{'x-real-ip':'audit-test-client'},body:{email:'reader@example.com'}},res);
+    assert.notEqual(res.statusCode,429);
+  }
+  res=response();
+  await handler({method:'POST',headers:{'x-real-ip':'audit-test-client'},body:{email:'reader@example.com'}},res);
+  assert.equal(res.statusCode,429);
+  assert.equal(res.headers.get('Retry-After'),'600');
+  const originalFetch=globalThis.fetch, originalKey=process.env.BUTTONDOWN_API_KEY;
+  try {
+    process.env.BUTTONDOWN_API_KEY='test-key';
+    globalThis.fetch=async (_url, options)=>{ assert.ok(options.signal instanceof AbortSignal); throw new Error('network unavailable'); };
+    res=response();
+    await handler({method:'POST',body:{email:'reader@example.com'}},res);
+    assert.equal(res.statusCode,502);
+  } finally {
+    globalThis.fetch=originalFetch;
+    if(originalKey===undefined)delete process.env.BUTTONDOWN_API_KEY;else process.env.BUTTONDOWN_API_KEY=originalKey;
+  }
+});

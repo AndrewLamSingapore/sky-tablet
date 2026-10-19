@@ -1,7 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
-const gameUrl = 'http://127.0.0.1:8765/royal-game-of-ur.html';
+const site = process.env.SKY_BASE_URL || 'http://127.0.0.1:8765';
+const gameUrl = site + '/royal-game-of-ur.html';
 test('research article and board render without JavaScript errors', async ({ page }) => {
   const errors=[]; page.on('pageerror', e=>errors.push(e.message));
   await page.goto(gameUrl);
@@ -15,7 +16,7 @@ test('research article and board render without JavaScript errors', async ({ pag
 test('dice roll, legal move, AI turn, and restart', async ({ page }) => {
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(gameUrl);
-  await page.evaluate(()=>{Math.random=()=>0.1});
+  await page.evaluate(()=>{Math.random=()=>0.99});
   await page.locator('#roll').click();
   await expect(page.locator('#dice')).toHaveText('4');
   await expect(page.locator('#board .cell.legal').first()).toBeVisible();
@@ -56,11 +57,15 @@ test('full deterministic game completes with seven pieces', async ({page})=>{
     window.__urTest.set([a,b],0,1);
     const opts=window.__urTest.moves();
     if(opts.length!==1||opts[0].d!==14)return {error:'finish candidate incorrect',opts};
-    window.__urTest.move(0,6);
-    return window.__urTest.state();
+    return {ready: true};
   });
   expect(result.error).toBeUndefined();
-  expect(result.over).toBe(true);
+  await page.locator('#hint').click();
+  await expect(page.locator('#status')).toContainText('Bear off a piece');
+  await page.getByRole('button',{name:'Bear off a piece'}).click();
+  await expect(page.locator('#humanScore')).toHaveText('7/7');
+  await expect(page.locator('#bearOff')).toBeHidden();
+  await expect(page.locator('#roll')).toBeDisabled();
   await expect(page.locator('#status')).toContainText('Ivory wins');
   expect(errors).toEqual([]);
 });
@@ -87,7 +92,7 @@ test('capture, protected rosette and bonus turn rules', async ({page})=>{
 test('zero roll skips turn and AI completes its turn without a JS exception',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(gameUrl);
- await page.evaluate(()=>{Math.random=()=>0.99});
+ await page.evaluate(()=>{Math.random=()=>0.1});
  await page.locator('#roll').click();
  await expect(page.locator('#board .piece')).toHaveCount(0);
  await expect(page.locator('#roll')).toBeEnabled();
@@ -96,7 +101,7 @@ test('zero roll skips turn and AI completes its turn without a JS exception',asy
 test('iPhone-sized touch input, scroll and article navigation',async({page,browserName})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto(gameUrl);
- await page.evaluate(()=>{Math.random=()=>0.1});
+ await page.evaluate(()=>{Math.random=()=>0.99});
  if(browserName==='webkit') await page.locator('#roll').tap(); else await page.locator('#roll').click();
  await expect(page.locator('#board .cell.legal').first()).toBeVisible();
  if(browserName==='webkit') await page.locator('#board .cell.legal').first().tap(); else await page.locator('#board .cell.legal').first().click();
@@ -109,7 +114,7 @@ test('iPhone-sized touch input, scroll and article navigation',async({page,brows
 });
 
 test('Interpretation Lens hub and source registry link all learning modules',async({page})=>{
- await page.goto('http://127.0.0.1:8765/interpretation-lens.html');
+ await page.goto(site + '/interpretation-lens.html');
  await expect(page.getByRole('heading',{name:'Interpretation Lens'})).toBeVisible();
  await expect(page.getByRole('link',{name:/Play and learn/})).toHaveAttribute('href','/royal-game-of-ur.html');
  await expect(page.getByRole('link',{name:/Examine the evidence/})).toHaveAttribute('href','/sources.html');
@@ -119,15 +124,37 @@ test('Interpretation Lens hub and source registry link all learning modules',asy
  await expect(page.getByLabel('I can explain a base-60 place value.')).toBeChecked();
  await page.getByRole('button',{name:'Reset my checklist'}).click();
  await expect(page.locator('#progress')).toHaveText('0 of 4 stages completed.');
- await page.goto('http://127.0.0.1:8765/sources.html');
+ await page.goto(site + '/sources.html');
  await expect(page.getByRole('heading',{name:'Historical source library'})).toBeVisible();
 });
 test('optional game hint never automatically moves a piece',async({page})=>{
  await page.goto(gameUrl);
- await page.evaluate(()=>{Math.random=()=>0.1});
+ await page.evaluate(()=>{Math.random=()=>0.99});
  await expect(page.locator('#hint')).toBeDisabled();
  await page.locator('#roll').click();
  await page.locator('#hint').click();
  await expect(page.locator('#status')).toContainText('Hint:');
  await expect(page.locator('#board .piece')).toHaveCount(0);
+});
+
+
+test('seven pieces finish through visible controls from a fresh game', async ({page})=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(gameUrl);
+  for(let moves=0;moves<105;moves++) {
+    // Ivory rolls one; Indigo rolls zero. No game state or move function is patched.
+    await page.evaluate(()=>{let calls=0;Math.random=()=>++calls===1?0.99:0.1});
+    await page.locator('#roll').click();
+    if(await page.locator('#bearOff').isVisible()) await page.locator('#bearOff').click();
+    else await page.locator('#board .cell.legal').first().click();
+    if(await page.locator('#humanScore').textContent()==='7/7')break;
+    await expect(page.locator('#roll')).toBeEnabled();
+  }
+  await expect(page.locator('#humanScore')).toHaveText('7/7');
+  await expect(page.locator('#status')).toContainText('Ivory wins');
+  await expect(page.locator('#roll')).toBeDisabled();
+  await page.locator('#restart').click();
+  await expect(page.locator('#humanScore')).toHaveText('0/7');
+  await expect(page.locator('#roll')).toBeEnabled();
+  expect(errors).toEqual([]);
 });

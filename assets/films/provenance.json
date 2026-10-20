@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "provider": "Higgsfield",
+  "scope": "Existing, previously published silent artistic previews copied unchanged into durable product assets; no new generation submitted.",
+  "source_revision": "b5804d68e745e79557f6e6e585fda580412a2288",
+  "source_page": "babylon-film.html",
+  "files": [
+    {
+      "path": "assets/films/hanging-gardens.mp4",
+      "bytes": 737088,
+      "sha256": "1fb94f0cc14c5d68351196f37c4e5f80b654638f0c78fb02ee377ed3d99aecb8"
+    },
+    {
+      "path": "assets/films/ishtar-gate.mp4",
+      "bytes": 1007460,
+      "sha256": "613890b5c10f9081c83eee2a8d9c4ac5da6afcb62df7c0988e5afd62cf5ad7f9"
+    }
+  ]
+}

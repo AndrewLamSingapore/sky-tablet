@@ -9,9 +9,9 @@
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "build": "node scripts/build.mjs",
-    "serve": "npm run build && python3 -m http.server 8765 --bind 127.0.0.1 --directory public",
+    "serve": "npm run build && node scripts/serve.mjs",
     "test:browser": "playwright test --workers=1",
-    "check": "npm test && python3 scripts/check_status_authority.py && npm run build"
+    "check": "npm test && node scripts/check-status-authority.mjs && npm run build"
   },
   "engines": {
     "node": "24.x"

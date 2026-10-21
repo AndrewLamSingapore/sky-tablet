@@ -1,4 +1,14 @@
 const {test,expect}=require('@playwright/test');
+test('malformed note fragments recover to the list and allow normal navigation',async({page})=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('/notes.html#%');
+  await expect(page.getByRole('heading',{name:'Notes from the build'})).toBeVisible();
+  await page.locator('#cards a').first().click();
+  await expect(page.locator('#article-body h1')).toBeVisible();
+  await page.getByRole('button',{name:'Back to notes'}).click();
+  await expect(page.getByRole('heading',{name:'Notes from the build'})).toBeVisible();
+  expect(errors).toEqual([]);
+});
 test('public notes and learning pages work without a 3D scene',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/notes.html?from=tablet#001');

@@ -54,12 +54,14 @@ Run the build-backed local server, then open http://127.0.0.1:8765 in a WebGL-ca
 
 ```bash
 npm ci
-npm test
+npm run check
 npm run test:browser
 npm run serve
 ```
 
 Install test browsers once with `npx playwright install --with-deps chromium webkit`. CI uses Node 24 and the committed dependency lock. Browser checks run on every pull request and main push.
+
+Local checks and the static preview need only Node 24; Python is not required. The preview binds to `127.0.0.1`, serves only the generated `public` directory, and supports byte-range video seeking. Both local signup routes report email delivery disabled, even if a provider credential exists in the shell. Use the public notes locally; deployed signup needs the Vercel server function. The older Python documentation guard remains an optional CI compatibility check.
 
 Email signup requires a server-only `BUTTONDOWN_API_KEY` environment variable in Vercel. Notes remain public at `/notes.html` and do not require an email address.
 

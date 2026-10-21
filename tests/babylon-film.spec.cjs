@@ -22,3 +22,15 @@ test('a failed video offers a return and playing another pauses its peer',async(
   expect(paused).toBe(true);
  }
 });
+
+test('archived local preview decodes, plays and seeks',async({page})=>{
+ await page.goto('/babylon-film.html');
+ const video=page.locator('video').first();
+ await video.evaluate(async clip=>{clip.muted=true;await clip.play()});
+ await expect.poll(()=>video.evaluate(clip=>clip.currentTime)).toBeGreaterThan(0);
+ await video.evaluate(clip=>{clip.pause();clip.currentTime=Math.min(2,clip.duration/2)});
+ await expect.poll(()=>video.evaluate(clip=>clip.readyState)).toBeGreaterThanOrEqual(2);
+ expect(await video.evaluate(clip=>clip.error?.message||null)).toBeNull();
+ expect(await video.evaluate(clip=>clip.currentTime)).toBeGreaterThan(0);
+ await expect(video.locator('source')).toHaveAttribute('src','/assets/films/ishtar-gate.mp4');
+});

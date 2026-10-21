@@ -45,7 +45,7 @@ test('full deterministic game completes with seven pieces', async ({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/royal-game-of-ur.html', async route=>{
     const fs=require('fs');const path=require('path');
-    let html=fs.readFileSync(path.join(__dirname,'..','royal-game-of-ur.html'),'utf8');
+    let html=fs.readFileSync(path.join(__dirname,'..','royal-game-of-ur.html'),'utf8').replace(/\r\n/g,'\n');
     html=html.replace("})();\n</script>", "window.__urTest={set:(p,t,n)=>{positions=p.map(a=>a.slice());turn=t;roll=n;over=false;render()},moves:()=>candidates(turn,roll),move:(p,i)=>move(p,i),state:()=>({positions:positions.map(a=>a.slice()),turn,roll,over})};\n})();\n</script>");
     await route.fulfill({status:200,contentType:'text/html',body:html});
   });
@@ -71,7 +71,7 @@ test('full deterministic game completes with seven pieces', async ({page})=>{
 });
 test('capture, protected rosette and bonus turn rules', async ({page})=>{
   await page.route('**/royal-game-of-ur.html', async route=>{
-    let html=fs.readFileSync(path.join(__dirname,'..','royal-game-of-ur.html'),'utf8');
+    let html=fs.readFileSync(path.join(__dirname,'..','royal-game-of-ur.html'),'utf8').replace(/\r\n/g,'\n');
     html=html.replace("})();\n</script>", "window.__urTest={set:(p,t,n)=>{positions=p.map(a=>a.slice());turn=t;roll=n;over=false;render()},moves:()=>candidates(turn,roll),move:(p,i)=>move(p,i),state:()=>({positions:positions.map(a=>a.slice()),turn,roll,over})};\n})();\n</script>");
     await route.fulfill({status:200,contentType:'text/html',body:html});
   });
@@ -139,6 +139,8 @@ test('optional game hint never automatically moves a piece',async({page})=>{
 
 
 test('seven pieces finish through visible controls from a fresh game', async ({page})=>{
+  // 105 moves use normal actionability checks; allow for slow mobile-browser automation.
+  test.setTimeout(120000);
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(gameUrl);
   for(let moves=0;moves<105;moves++) {

@@ -321,7 +321,9 @@ More of these as the build continues. If you want the next one when it's up, the
   document.getElementById('back-btn').addEventListener('click', closeNote);
 
   function syncHash(){
-    const id = decodeURIComponent(window.location.hash.slice(1));
+    let id;
+    try { id = decodeURIComponent(window.location.hash.slice(1)); }
+    catch { closeNote(false); return; }
     if (id) openNote(id);
     else closeNote(false);
   }

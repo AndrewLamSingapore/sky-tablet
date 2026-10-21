@@ -38,6 +38,6 @@ The overlay was implemented in `a0743119d3d4df2498c0829b7c38e63ee80bdbe2`; publi
 
 ## Verification scope
 
-Run `npm test` and `python scripts/check_status_authority.py`. The Node tests execute the shipped scene with real Three.js geometry/math and substituted DOM/GPU presentation. They cover navigation, camera state, tablet interaction and newsletter behavior with mocked requests. Focused local checks can also confirm overlay material restoration and the unchanged note routes.
+Run `npm run check` and `npm run test:browser`. Local checks and preview use Node 24; `python scripts/check_status_authority.py` remains an optional CI compatibility guard. The Node tests execute the shipped scene with real Three.js geometry/math and substituted DOM/GPU presentation. They cover navigation, camera state, tablet interaction and newsletter behavior with mocked requests. Focused local checks can also confirm overlay material restoration and the unchanged note routes.
 
 These checks establish source behavior. A deployment identity and served-byte comparison establish what a host serves. Rendered WebGL appearance, performance, physical iPhone use and real newsletter delivery require their own observations.

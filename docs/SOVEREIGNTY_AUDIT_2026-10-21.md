@@ -51,11 +51,11 @@ The new standard-library preview binds only to `127.0.0.1`, serves real paths co
 | First browser run | FAIL, preserved | 30 passed, four CRLF-hook failures, two intentional WebKit 3D skips. `sky-browser-first-run.json` and `sky-first-browser-failures/`. |
 | Second full browser run | FAIL, preserved | 35 passed, one WebKit full-game timeout, two intentional WebKit 3D skips. `sky-browser-second-run.json` and `sky-second-browser-timeout/`. |
 | Corrected full-game scenario | PASS | Focused Chromium + WebKit rerun, retries disabled: two passed. `sky-browser-completion-rerun.json`. |
-| Unique browser cases after repairs | PASS with stated scope | Across the full and focused runs, 36 unique cases passed and two WebKit 3D cases were skipped. No claim is made that the last full-suite invocation exited successfully. |
+| Final full candidate browser run, retries disabled | PASS | At implementation commit `c2b61bddf32cd19d209f5f38080c5c78c4d6f2b3`: 36 passed, two intentional WebKit 3D skips, zero failures/flaky cases, one worker, 155.623 seconds. `sky-browser-final-run.json`. Earlier failure and combined-run evidence is retained. |
 | Actual local media | PASS | The archived Ishtar preview decoded, played and sought in both browsers. Range validation also has dedicated HTTP tests. |
 | Standalone failure behavior | PASS | Browser routes abort optional APIs/all external origins; core local flows remain usable and signup fails gracefully. |
 | Visible 3D evidence | PASS, bounded | Chromium tablet screenshot was captured and inspected. It proves local rendering, not physical iPhone performance or final visual acceptance. |
-| Independent rebuild recovery | PASS, bounded | Rebuild reproduced all 26 generated files byte-for-byte and left 52 tracked baseline files unchanged. `sky-recovery-check.mjs`, `sky-recovery-result.json`. |
+| Independent rebuild recovery | PASS, bounded | Final committed-source recovery reproduced all 26 generated files byte-for-byte and left all 57 tracked candidate files unchanged. `sky-recovery-check.mjs`, `sky-recovery-final-result.json`. The earlier 52-file baseline receipt is retained. |
 | Production source/deployment identity | NOT TESTED | No candidate push or deployment was authorized/performed. Existing production-assessment code is not a receipt for this candidate. |
 | Real newsletter delivery and distributed abuse controls | NOT TESTED | Tests mock Buttondown; credentials were neither read out nor changed. Existing throttling is per instance; platform WAF acceptance remains separate. |
 | Physical mobile/WebGL frame time, energy, accessibility acceptance | NOT TESTED | Browser emulation and camera math do not establish these measurements. |

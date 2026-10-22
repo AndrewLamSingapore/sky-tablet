@@ -68,3 +68,10 @@ Email signup requires a server-only `BUTTONDOWN_API_KEY` environment variable in
 Portfolio status: [STATUS.md](https://github.com/AndrewLamSingapore/orqevia/blob/main/STATUS.md) is the sole portfolio status reference. Each product owns its source, configuration, contracts and domain records. The [operational manifest](https://github.com/AndrewLamSingapore/orqevia/blob/main/governance/operational-manifest.json) provides dated ORQEVIA component and observation references; it does not establish deployment status.
 
 Subscription routes share origin validation, an eight-second provider timeout and best-effort per-instance throttling (five requests per client in ten minutes). Distributed abuse protection requires a platform WAF rule. Missing credentials leave signup unavailable and display a notice; they do not count as a verified delivery integration.
+
+## Campaign visual
+
+Repository advertising creative, generated through the bounded Higgsfield
+campaign (batch 2026-10-22, zero retries, under the US$0.03 cap):
+
+![Sky Tablet campaign visual](docs/ads/ad-1600x900.png)

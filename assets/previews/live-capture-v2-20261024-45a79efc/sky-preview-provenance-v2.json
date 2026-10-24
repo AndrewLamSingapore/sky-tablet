@@ -1,0 +1,82 @@
+{
+  "schema": "product-preview-provenance.v2",
+  "product": "sky",
+  "created_at": "2026-10-24T04:39:49.691165+00:00",
+  "recorded_owning_source_revision": "49f658516ecc8b2c1b32b46d87322c4fe96f4a2e",
+  "source_product_url": "https://sky-tablet.vercel.app",
+  "asset_classification": "EDITED_GENUINE_PRODUCT_VIDEO_NO_NEW_GENERATED_CINEMATIC_FOOTAGE",
+  "new_paid_provider_calls": 0,
+  "source_recording_sha256": "41c93cff760e8c2b70bcf0adcc9f59ee0c0efe3e1bb8c2e7739b15487b8fded8",
+  "source_capture_evidence_sha256": "f12b58e41f4183e3f3846955d65090503c0b30e110703958df47ad12da750c34",
+  "recorded_feature_boundary": "Modern artistic 3D reconstruction and reconstructed board-game interpretation, with base-60 education and source links. No authentic artifact, cuneiform fidelity or date-validated ephemeris claim.",
+  "domain_references": [
+    {
+      "url": "https://www.britishmuseum.org/collection/object/W_1928-1009-378",
+      "scope": "Museum object identity reference; not validation of all reconstructed rules or the rendered scene."
+    },
+    {
+      "url": "https://cdli.earth/publications/220412",
+      "scope": "Previously recorded bibliographic reference; no claim of newly completed philological review."
+    }
+  ],
+  "audio": "Original numerical ambient composition and owner-requested installed offline Windows speech. No stock recording.",
+  "files": [
+    {
+      "path": "sky-trailer-60s-v2.mp4",
+      "bytes": 4018498,
+      "sha256": "df2a1de49cd5f35adb34e1cd5da04069d6076824c9f333d433814992d5e8e30e"
+    },
+    {
+      "path": "sky-trailer-60s-v2.vtt",
+      "bytes": 1157,
+      "sha256": "69a2cc0fb158aad00612a2e9c372ae2b23e2e94024977e081e6f246df1a0d4bd"
+    },
+    {
+      "path": "sky-trailer-60s-v2.transcript.md",
+      "bytes": 1496,
+      "sha256": "db4552ebf406e0e143244d8adfa7a81974c4eabff6f44a3f7d9056bdb6865b2c"
+    },
+    {
+      "path": "sky-technical-demo-30s-v2.mp4",
+      "bytes": 2526296,
+      "sha256": "701ed94d6f480a9521c6665d717116bd814a3be9c2bec5001f81317d3229812b"
+    },
+    {
+      "path": "sky-technical-demo-30s-v2.vtt",
+      "bytes": 735,
+      "sha256": "81a8a14b42e69267bcfe9c2595772d8ecb298b47ea1004a24c7e444217d28ac4"
+    },
+    {
+      "path": "sky-technical-demo-30s-v2.transcript.md",
+      "bytes": 1380,
+      "sha256": "f7318ec9c5d1e59a46e52e5d5c9de9bb1db58f315d9f2b0a4cc5d4d6ef13a54d"
+    },
+    {
+      "path": "sky-teaser-15s-v2.mp4",
+      "bytes": 1064838,
+      "sha256": "46885ebcb958e9a7f624b6687b8f51068487276da52000f71830ff3003bbb3b4"
+    },
+    {
+      "path": "sky-teaser-15s-v2.vtt",
+      "bytes": 474,
+      "sha256": "bd10c525c3c6793e88e32791f180ff5271b379e50010c1ecc2081e30a724fa5e"
+    },
+    {
+      "path": "sky-teaser-15s-v2.transcript.md",
+      "bytes": 980,
+      "sha256": "87bcf1194c0dc01913ef335133378678070deb42f41c6c7b659e8dbe4881192f"
+    },
+    {
+      "path": "sky-poster.png",
+      "bytes": 207006,
+      "sha256": "96d0bc8689b5375b4b6392ba255ebf63bb376713b7c7fa80337f4035687fc358"
+    },
+    {
+      "path": "sky-thumbnail.png",
+      "bytes": 36326,
+      "sha256": "9c7d58fb90478d5500ce08716a8432da49d7f05c293b1b13441b492a1f8c8e2f"
+    }
+  ],
+  "physical_mobile_device_tested": false,
+  "human_spot_check_claimed": false
+}

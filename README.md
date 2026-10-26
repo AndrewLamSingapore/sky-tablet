@@ -1,3 +1,5 @@
+[![THE SKY TABLET — From an ancient city to a sky full of questions.](docs/repository-banner.svg)](https://sky-tablet.vercel.app/)
+
 # The Sky Tablet
 
 **From an ancient city to a sky full of questions.**
@@ -9,6 +11,16 @@
 Start at street level. Pass through the gate. Encounter a clay tablet, then pull back into an open sky with **MUL — “star”**, **Venus, Jupiter and Mars** and the **Three Paths**. Switch to free exploration whenever curiosity takes over.
 
 A browser-based experiment by **Andrew Lam**, bringing together cultural history, interactive storytelling and technology. Select sound to hear the original generative score. No account required.
+
+## Start here
+
+| You want to… | Go to |
+| --- | --- |
+| Enter the experience | [Cinematic journey](https://sky-tablet.vercel.app/) and [public build notes](https://sky-tablet.vercel.app/notes.html) |
+| Run or inspect the source | [Run and verify](#run-and-verify) and [Interpretation Lens architecture](docs/INTERPRETATION_LENS_ARCHITECTURE.md) |
+| Read or contribute evidence | [Interpretation limits](#evidence-and-limits), [asset provenance](docs/2026-09-16-cinematic-repair.md) and [research discussions](https://github.com/AndrewLamSingapore/sky-tablet/discussions) |
+
+[Browse all six projects and their source](https://github.com/AndrewLamSingapore/AndrewLamSingapore#selected-work) · [About Andrew](https://authority-engine-app.vercel.app/about)
 
 ## What would you build from this?
 

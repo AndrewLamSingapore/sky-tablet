@@ -1,0 +1,24 @@
+name: Set up browser dependencies
+description: Install locked headless test browsers using Ubuntu HTTPS package mirrors.
+runs:
+  using: composite
+  steps:
+    - name: Use Ubuntu HTTPS package mirrors
+      shell: bash
+      run: |
+        set -euo pipefail
+        test -f /etc/apt/apt-mirrors.txt
+        printf '%s\tpriority:1\n%s\tpriority:2\n' \
+          'https://archive.ubuntu.com/ubuntu/' \
+          'https://security.ubuntu.com/ubuntu/' \
+          | sudo tee /etc/apt/apt-mirrors.txt
+        printf '%s\n' \
+          'Acquire::Retries "2";' \
+          'Acquire::https::Timeout "30";' \
+          | sudo tee /etc/apt/apt.conf.d/99-sky-browser-downloads
+    - name: Install browser system dependencies
+      shell: bash
+      run: npx playwright install-deps chromium webkit
+    - name: Download headless Chromium and WebKit
+      shell: bash
+      run: npx playwright install --only-shell chromium webkit

@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   production-assessment:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
       SKY_BASE_URL: https://sky-tablet.vercel.app
@@ -18,7 +18,8 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npx playwright install --with-deps chromium webkit
+      - name: Set up browser dependencies through HTTPS mirrors
+        uses: ./.github/actions/setup-browsers
       - name: Wait for the exact source to reach production and check API contracts
         run: |
           python3 - <<'PY'

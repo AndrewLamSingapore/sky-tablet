@@ -18,7 +18,7 @@ A browser-based experiment by **Andrew Lam**, bringing together cultural history
 | --- | --- |
 | Enter the experience | [Cinematic journey](https://sky-tablet.vercel.app/) and [public build notes](https://sky-tablet.vercel.app/notes.html) |
 | Run or inspect the source | [Run and verify](#run-and-verify) and [Interpretation Lens architecture](docs/INTERPRETATION_LENS_ARCHITECTURE.md) |
-| Read or contribute evidence | [Interpretation limits](#evidence-and-limits), [asset provenance](docs/2026-09-16-cinematic-repair.md) and [research discussions](https://github.com/AndrewLamSingapore/sky-tablet/discussions) |
+| Read or contribute evidence | [Interpretation limits](#evidence-and-limits), [asset provenance](docs/2026-09-16-cinematic-repair.md) and [research discussions](https://github.com/AndrewLamSingapore/sky-tablet/discussions) · [Report a bug](https://github.com/AndrewLamSingapore/sky-tablet/issues) · [Wiki](https://github.com/AndrewLamSingapore/sky-tablet/wiki) |
 
 [Browse all six projects and their source](https://github.com/AndrewLamSingapore/AndrewLamSingapore#selected-work) · [About Andrew](https://authority-engine-app.vercel.app/about)
 

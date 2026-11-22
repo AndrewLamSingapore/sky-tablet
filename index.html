@@ -3,22 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>The Sky Tablet — Enter Ancient Mesopotamia</title>
-  <meta name="description" content="Enter an ancient city at dusk. Explore its clay tablets and night sky, then connect with creator Andrew Lam about research, technology and collaboration.">
-  <meta property="og:title" content="The Sky Tablet — An exploration by Andrew Lam">
-  <meta property="og:description" content="An ancient city. A living sky. A conversation waiting to happen.">
+  <title>The Sky Tablet — Ancient Mesopotamia in 3D</title>
+  <meta name="description" content="Journey from an ancient Mesopotamian city into an interactive night sky. Explore cuneiform, astronomy and the interpretation behind a 3D storytelling experiment.">
+  <meta property="og:title" content="The Sky Tablet — Ancient Mesopotamia in 3D">
+  <meta property="og:description" content="Journey from an ancient Mesopotamian city into an interactive night sky. Explore cuneiform, astronomy and the interpretation behind a 3D storytelling experiment.">
   <meta property="og:image" content="https://sky-tablet.vercel.app/sky-atmosphere.webp">
   <meta property="og:url" content="https://sky-tablet.vercel.app/">
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="The Sky Tablet">
-  <meta name="twitter:title" content="The Sky Tablet — An exploration by Andrew Lam">
-  <meta name="twitter:description" content="An ancient city. A living sky. A conversation waiting to happen.">
+  <meta name="twitter:title" content="The Sky Tablet — Ancient Mesopotamia in 3D">
+  <meta name="twitter:description" content="Journey from an ancient Mesopotamian city into an interactive night sky. Explore cuneiform, astronomy and the interpretation behind a 3D storytelling experiment.">
   <meta name="twitter:image" content="https://sky-tablet.vercel.app/sky-atmosphere.webp">
   <link rel="canonical" href="https://sky-tablet.vercel.app/">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","url":"https://sky-tablet.vercel.app/","name":"The Sky Tablet","description":"Enter ancient Mesopotamia. Explore clay tablets and the night sky, then connect with creator Andrew Lam about research, technology and collaboration.","author":{"@type":"Person","name":"Andrew Lam","url":"https://github.com/AndrewLamSingapore"}}</script>
   <style>
     html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08101b}
+    .sky-introduction{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
     iframe{display:block;border:0;width:100%;height:100%;background:#08101b}
     #skySound{position:fixed;z-index:20;top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));min-height:44px;border:1px solid #f0ca78aa;border-radius:999px;padding:10px 15px;background:#07111de8;color:#fff;font:700 14px/1 system-ui,sans-serif;letter-spacing:.08em;cursor:pointer;backdrop-filter:blur(9px);box-shadow:0 8px 30px #0008}
     #skySound[aria-pressed="true"]{background:#9a6a2e;color:#fff4d8}
@@ -28,8 +29,11 @@
   </style>
   <link rel="stylesheet" href="/authority-family.css?v=1">
   <script src="/cinematic-score.js"></script>
+<meta property="og:image:alt" content="An atmospheric interpretation of an ancient city beneath the night sky">
+<meta name="twitter:image:alt" content="An atmospheric interpretation of an ancient city beneath the night sky">
 </head>
 <body>
+  <main class="sky-introduction"><h1>The Sky Tablet: an ancient city, an open sky.</h1><p>A cinematic 3D interpretation of Mesopotamia, cuneiform and ancient astronomy by Andrew Lam. Historical references and artistic interpretation remain distinct.</p><a href="/notes.html">Read the build notes</a> · <a href="/sources.html">Explore the historical sources</a></main>
   <button id="skySound" type="button" aria-pressed="false" data-state="ready">SOUND READY</button>
   <p id="skySoundStatus" role="status" aria-live="polite">Cinematic score is ready to play.</p>
   <iframe id="experience" src="/experience.html" title="The Sky Tablet cinematic experience" allow="autoplay"></iframe>

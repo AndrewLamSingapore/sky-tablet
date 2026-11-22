@@ -1,0 +1,15 @@
+/* Shared reading surface for the Sky Tablet's notes, sources and learning pages. */
+body.sky-editorial { --paper: #f1e9d6; --gold: #e4bd73; background: #0b1423; color: #f1e9d6; font: 16px/1.75 system-ui, sans-serif; margin: 0; }
+.sky-editorial > nav, .sky-editorial > header { max-width: 1160px; margin: auto; padding: 22px 28px; border-bottom: 1px solid #e4bd7333; font-size: .9375rem; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; }
+.sky-editorial > main, .sky-editorial > article { max-width: 1040px; margin: auto; padding: clamp(34px, 6vw, 76px) 28px; }
+.sky-editorial h1, .sky-editorial h2, .sky-editorial h3 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; color: #f7efdd; line-height: 1.12; text-wrap: balance; }
+.sky-editorial h1 { font-size: clamp(2.6rem, 5.8vw, 4.6rem); letter-spacing: -.035em; max-width: 19ch; margin: 16px 0 28px; }
+.sky-editorial h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); margin-block: 32px 18px; }
+.sky-editorial p, .sky-editorial li { color: #c5cfdb; font-size: 1rem; line-height: 1.8; }
+.sky-editorial a { color: #f1cc87; text-underline-offset: 5px; }
+.sky-editorial button, .sky-editorial input, .sky-editorial select { font: inherit; min-height: 44px; }
+.sky-editorial :focus-visible { outline: 2px solid #f1cc87; outline-offset: 4px; }
+.sky-editorial .card, .sky-editorial article article, .sky-editorial main > article, .sky-editorial .panel { background: #122136; border: 1px solid #e4bd7333; border-radius: 16px; padding: 26px; box-shadow: none; }
+.sky-editorial small, .sky-editorial .tag, .sky-editorial .eyebrow { font-size: .875rem; }
+.sky-editorial video, .sky-editorial img { max-width: 100%; border-radius: 14px; }
+@media(max-width:600px) { .sky-editorial > main, .sky-editorial > article { padding: 32px 20px; } .sky-editorial > nav, .sky-editorial > header { padding: 18px 20px; } .sky-editorial h1 { font-size: clamp(2.4rem, 10vw, 3.4rem); } }

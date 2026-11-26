@@ -20,7 +20,7 @@ A browser-based experiment by **Andrew Lam**, bringing together cultural history
 | Run or inspect the source | [Run and verify](#run-and-verify) and [Interpretation Lens architecture](docs/INTERPRETATION_LENS_ARCHITECTURE.md) |
 | Read or contribute evidence | [Interpretation limits](#evidence-and-limits), [asset provenance](docs/2026-09-16-cinematic-repair.md) and [research discussions](https://github.com/AndrewLamSingapore/sky-tablet/discussions) · [Report a bug](https://github.com/AndrewLamSingapore/sky-tablet/issues) · [Wiki](https://github.com/AndrewLamSingapore/sky-tablet/wiki) |
 
-[Browse all six projects and their source](https://github.com/AndrewLamSingapore/AndrewLamSingapore#selected-work) · [About Andrew](https://authority-engine-app.vercel.app/about)
+[Browse the project and source directory](https://github.com/AndrewLamSingapore/AndrewLamSingapore#selected-work) · [About Andrew](https://authority-engine-app.vercel.app/about)
 
 ## What would you build from this?
 
@@ -77,7 +77,7 @@ Local checks and the static preview need only Node 24; Python is not required. T
 
 Email signup requires a server-only `BUTTONDOWN_API_KEY` environment variable in Vercel. Notes remain public at `/notes.html` and do not require an email address.
 
-Portfolio status: [STATUS.md](https://github.com/AndrewLamSingapore/orqevia/blob/main/STATUS.md) is the sole portfolio status reference. Each product owns its source, configuration, contracts and domain records. The [operational manifest](https://github.com/AndrewLamSingapore/orqevia/blob/main/governance/operational-manifest.json) provides dated ORQEVIA component and observation references; it does not establish deployment status.
+Current ORQEVIA source: [ORQEVIA-CURRENT-STATE.md](https://github.com/AndrewLamSingapore/orqevia/blob/main/ORQEVIA-CURRENT-STATE.md), reached through the portfolio pointer [STATUS.md](https://github.com/AndrewLamSingapore/orqevia/blob/main/STATUS.md). Each product owns its source, configuration, contracts and domain records. The [operational manifest](https://github.com/AndrewLamSingapore/orqevia/blob/main/governance/operational-manifest.json) is a dated historical reference. Source, CI, deployment and runtime acceptance are separate evidence.
 
 Subscription routes share origin validation, an eight-second provider timeout and best-effort per-instance throttling (five requests per client in ten minutes). Distributed abuse protection requires a platform WAF rule. Missing credentials leave signup unavailable and display a notice; they do not count as a verified delivery integration.
 
